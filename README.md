@@ -6,7 +6,7 @@
 
 数组：
 
-````
+```
 以下tmp赋值方法完全不同：
 1. 直接赋值，赋值完毕与nums无关：
         int[] tmp=new int[nums.length];
