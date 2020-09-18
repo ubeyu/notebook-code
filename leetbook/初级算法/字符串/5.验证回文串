@@ -1,0 +1,45 @@
+#    LeetCode 125. 验证回文串
+
+给定一个字符串，验证它是否是回文串，只考虑字母和数字字符，可以忽略字母的大小写。</br>
+
+**说明** ：</br>
+说明：本题中，我们将空字符串定义为有效的回文串。</br>
+
+</br></br></br>
+
+##    自己解法：
+新建StringBuilder用于字符串操作；</br>
+循环输入字符串s，将为大小写字母、数字的字符append进StringBuilder，注意大写字母append时加32变小写字母，因为题目忽略大小写；</br>
+循环StringBuilder的一半：若为偶数长度则是前一半，若为奇数长度则中间不管。</br>
+然后判断是否对称相等，若不相等则返回false，若循环完毕，则返回true。</br>
+```
+class Solution {
+    public boolean isPalindrome(String s) {
+        StringBuilder tmp=new StringBuilder();
+        for(int i=0;i<s.length();i++){
+            if(s.charAt(i)>='a' && s.charAt(i)<='z'){
+                tmp.append(s.charAt(i));
+            }else if(s.charAt(i)>='A' && s.charAt(i)<='Z'){
+                tmp.append((char)(s.charAt(i)+32));
+            }else if(s.charAt(i)>='0' && s.charAt(i)<='9'){
+                tmp.append((char)(s.charAt(i)));
+            }
+        }
+        for(int i=0;i<tmp.length()/2;i++){
+            if(tmp.charAt(i) != tmp.charAt(tmp.length()-1-i)) return false;
+        }
+        return true;
+    }
+}
+```
+```
+执行用时：4 ms, 在所有 Java 提交中击败了67.25%的用户
+内存消耗：38.7 MB, 在所有 Java 提交中击败了83.51%的用户
+```
+
+
+
+## <注意点>
+````
+1.字符的大写字母比小写字母ASCII码小 32;
+2.操作可变字符串使用StringBuilder或StringBuffer，在这些字符串尾部追加字符时用append;
