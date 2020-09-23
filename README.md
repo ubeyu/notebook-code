@@ -35,5 +35,32 @@
     最好写成：    sb.append(String.valueOf(cur));
                  sb.append((sequence.charAt(sequence.length()-1)));
 9.String.valueOf(cur)将int型转为String型。
+10.for循环内少一些判断可以优化时间复杂度；
+11.判断当前字符串是否超过32位整数，可用 Long.parseLong(sb.toString()) >= Integer.MAX_VALUE；
+12.Java封装类和基本数据类型,Long和long的区别：
+   · Java的数据类型分为两种：
+        ① 基本类型：byte(8),short(16),int(32),long(64),float(32),double(64),char(16), boolean(1)
+        ② 对象类型：Byte,Short,Integer,Long,Float,Double,Character,Boolean
+   · 上面的对象类型分别是基本类型和包装类型，例如Byte是byte的包装类。
+   · Java语言是一个面向对象的语言，但是Java中的基本数据类型却是不面向对象的，这在实际使用时存在很多的不便，为了解决这个不足，在设计类时为每个基本数据类型设计了一个对应的类进行代表，这样8个基本数据类型对应的类统称为包装类（Wrapper Class）
+   · 对于包装类说，这些类的用途主要包含两种：
+        a、作为和基本数据类型对应的类类型存在，方便涉及到对象的操作。
+        b、包含每种基本数据类型的相关属性如最大值、最小值等，以及相关的操作方法。
+     Long数据的大小的比较
+   · 对于Long类型的数据，这个数据是一个对象，所以对象不可以直接通过“>”,“==”，“<”的比较，如果要比较两个对象的是否相等的话，我们可以用Long对象的.equals（）方法：
+            Long l1 = new Long(100);  
+            Long l2 = new Long(200);  
+            System.out.println(l1.equals(l2));  
+   · 如果要进行“>”,“<”的比较的话，可以通过Long对象的.longValue()方法：
+            Long l1 = new Long(100);  
+            Long l2 = new Long(200);  
+            System.out.println(l1.longValue()<l2.longValue());  
+   · long数据的大小的比较
+      对于long类型的数据，这个数据是一个基本数据类型，不属于对象，所以可以直接通过“>”,“==”，“<”作比较
+            long l3 = 300;  
+            long l4 = 400;  
+            System.out.println(l3>l4);  
+            System.out.println(l3<l4);  
+            System.out.println(l3==l4);
 ```
 
