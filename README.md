@@ -28,5 +28,11 @@
 3.s.indexOf('')可以找到字符在字符串的索引;
 4.字符的大写字母比小写字母ASCII码小 32;
 5.操作可变字符串使用StringBuilder或StringBuffer，在这些字符串尾部追加字符时用append;
+6.equals可用于字符串的比较，不变字符串一般放到前面;
+7.substring判断相等一般可以改写为循环每一位判断;
+8.append时最好不要多个变量放到一起，可能会造成相加的现象;
+               sb.append(String.valueOf(cur) + (sequence.charAt(sequence.length()-1)));
+    最好写成：    sb.append(String.valueOf(cur));
+                 sb.append((sequence.charAt(sequence.length()-1)));
 ```
 
