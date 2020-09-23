@@ -1,0 +1,58 @@
+#    LeetCode 28. 实现 strStr()
+
+实现 strStr() 函数。</br>
+给定一个 haystack 字符串和一个 needle 字符串，在 haystack 字符串中找出 needle 字符串出现的第一个位置 (从0开始)。如果不存在，则返回 -1。</br>
+
+
+</br></br></br>
+
+##    自己解法：
+判断needle长度大于haystack时，直接返回-1；</br>
+若符合条件则循环判断，如果equals，则返回i值，若循环结束没有返回，则出循环返回-1；</br>
+```
+class Solution {
+    public int strStr(String haystack, String needle) {
+        if(haystack.length()<needle.length()) return -1;
+        for(int i=0;i<haystack.length()+1-needle.length();i++){
+            if(needle.equals(haystack.substring(i,i+needle.length()))){
+                return i;
+            }
+        }
+        return -1;
+    }
+}
+```
+```
+执行用时：1 ms, 在所有 Java 提交中击败了78.46%的用户
+内存消耗：38.8 MB, 在所有 Java 提交中击败了28.98%的用户
+```
+
+
+
+##    官方解法：
+即是把我的equals扩展为循环判断每一位是否相等；</br>
+```
+class Solution {
+    public int strStr(String haystack, String needle) {
+        int h=haystack.length();
+        int n=needle.length();
+        for(int i=0;i<=h-n;i++){
+            int j=0;
+            for(;j<n;j++){
+                if(haystack.charAt(i+j)!=needle.charAt(j)) break; 
+            }
+            if(j==n) return i;
+        }
+        return -1;
+    }
+}
+```
+
+
+
+
+
+## <注意点>
+````
+1.字符的大写字母比小写字母ASCII码小 32;
+2.操作可变字符串使用StringBuilder或StringBuffer，在这些字符串尾部追加字符时用append;
