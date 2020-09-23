@@ -7,18 +7,18 @@
 数组：
 
 ```
-  以下tmp赋值方法完全不同：
-  1.    int[] tmp=new int[nums.length];
+1.以下tmp赋值方法完全不同：
+        int[] tmp=new int[nums.length];
         for(int i=0;i<nums.length;i++){
             tmp[i]=nums[i];
         } 
         直接赋值，赋值完毕与nums无关：
         
-  2.    int[] tmp=nums;
+        int[] tmp=nums;
         引用，类似指针，tmp会随着nums变化而实时变化：
       
-3.利用HashSet的元素不重复性，涉及到:set.contains(nums[i])、set.add(nums[i])方法。同时HashSet和HashMap相比Set是一维，Map是二维。
-4.利用Arrays.sort(nums)排序方法，先排序，再判断相邻是否相等。
+2.利用HashSet的元素不重复性，涉及到:set.contains(nums[i])、set.add(nums[i])方法。同时HashSet和HashMap相比Set是一维，Map是二维。
+3.利用Arrays.sort(nums)排序方法，先排序，再判断相邻是否相等。
 ```
 
 字符串：
