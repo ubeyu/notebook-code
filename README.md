@@ -1,5 +1,5 @@
-# leetcode-notebook
-刷题笔记：
+# leetcode-notebook刷题笔记
+
 
 
 ## 注意点
@@ -62,5 +62,8 @@
             System.out.println(l3>l4);  
             System.out.println(l3<l4);  
             System.out.println(l3==l4);
+                    
+   · Long.ValueOf("String")返回Long包装类型
+   · Long.parseLong("String")返回long基本数据类型
 ```
 
