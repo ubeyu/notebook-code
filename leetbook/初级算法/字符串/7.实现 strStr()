@@ -49,10 +49,7 @@ class Solution {
 ```
 
 
-
-
-
 ## <注意点>
 ````
-1.字符的大写字母比小写字母ASCII码小 32;
-2.操作可变字符串使用StringBuilder或StringBuffer，在这些字符串尾部追加字符时用append;
+1.equals可用于字符串的比较，不变字符串一般放到前面;
+2.substring判断相等一般可以改写为循环每一位判断;
