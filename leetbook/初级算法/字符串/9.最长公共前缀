@@ -1,0 +1,51 @@
+#    LeetCode 14. 最长公共前缀
+
+编写一个函数来查找字符串数组中的最长公共前缀。</br>
+
+如果不存在公共前缀，返回空字符串 ""。</br>
+
+```
+输入: ["flower","flow","flight"]
+输出: "fl"
+```
+
+</br></br></br>
+
+##    自己解法：
+先排除strs内不含元素的情况，若等于零，则输出""</br>
+若不为0，先循环一遍各元素，找出长度最少的字符串，这个长度即为输出可能的最大长度。</br>
+二层循环，判断每个元素的对应位是否相等，若相等则将其append到StringBuilder，若不等，退出循环，返回当前StringBuilder的String格式，若循环结束，也同样返回当前StringBuilder的String格式。</br>
+```
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        if(strs.length==0) return "";
+        int strMin=Integer.MAX_VALUE;
+        for(String str:strs){
+            strMin=Math.min(strMin,str.length());
+        }
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<strMin;i++){
+            for(int j=1;j<strs.length;j++){
+                if(strs[0].charAt(i) != strs[j].charAt(i)) return sb.toString();
+            }
+            sb.append(strs[0].charAt(i));
+        }
+        return sb.toString();
+    }
+}
+```
+```
+执行用时：1 ms, 在所有 Java 提交中击败了88.08%的用户
+内存消耗：37.3 MB, 在所有 Java 提交中击败了14.58%的用户
+```
+
+
+
+## <注意点>
+````
+1.append时最好不要多个变量放到一起，可能会造成相加的现象;
+```
+     不好：       sb.append(String.valueOf(cur) + (sequence.charAt(sequence.length()-1)));
+     最好写成：    sb.append(String.valueOf(cur));
+                  sb.append((sequence.charAt(sequence.length()-1)));
+```
