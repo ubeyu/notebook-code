@@ -2,7 +2,7 @@
 刷题笔记：
 
 
-## <注意点>
+## 注意点
 
 数组：
 
@@ -34,5 +34,6 @@
                sb.append(String.valueOf(cur) + (sequence.charAt(sequence.length()-1)));
     最好写成：    sb.append(String.valueOf(cur));
                  sb.append((sequence.charAt(sequence.length()-1)));
+9.String.valueOf(cur)将int型转为String型。
 ```
 
