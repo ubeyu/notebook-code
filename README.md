@@ -75,5 +75,9 @@
   可以处理length为1，n为1的情况。
   即没有进入for循环，可直接利用 dummy.next=dummy.next.next 将头结点赋为空。
 3.需要有一个中间变量 tmp 用于保存当前 cur 的下一个节点信息，若不保存则在 cur.next = pre 这一步后丢失。
+4.ListNode prev =new ListNode(0);
+  ListNode pre = prev;
+  这样可以新建链表，同时返回其头结点。
+5.LeetCode 21.《合并两个有序链表》题解的递归调用很精妙，多学习！
 ```
 
