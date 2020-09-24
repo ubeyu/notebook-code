@@ -8,15 +8,13 @@
 
 ```
 1.以下tmp赋值方法完全不同：
-        int[] tmp=new int[nums.length];
-        for(int i=0;i<nums.length;i++){
-            tmp[i]=nums[i];
-        } 
-        直接赋值，赋值完毕与nums无关：
-        
-        int[] tmp=nums;
-        引用，类似指针，tmp会随着nums变化而实时变化：
-      
+  ① 直接赋值，赋值完毕与nums无关：
+    int[] tmp=new int[nums.length];
+    for(int i=0;i<nums.length;i++){
+        tmp[i]=nums[i];
+    } 
+  ② 引用，类似指针，tmp会随着nums变化而实时变化：
+    int[] tmp=nums;
 2.利用HashSet的元素不重复性，涉及到:set.contains(nums[i])、set.add(nums[i])方法。同时HashSet和HashMap相比Set是一维，Map是二维。
 3.利用Arrays.sort(nums)排序方法，先排序，再判断相邻是否相等。
 ```
@@ -65,5 +63,16 @@
                     
    · Long.ValueOf("String")返回Long包装类型
    · Long.parseLong("String")返回long基本数据类型
+```
+
+链表：
+```
+1.链表删除节点方法：
+ ① 输出删除节点的上个节点node，将node.next赋值为node.next.next；
+ ② 输出删除节点node，将node.val赋值为node.next.val，next赋值为node.next.next。
+2.引入： ListNode dummy=new ListNode(0);
+         dummy.next=head;
+  可以处理length为1，n为1的情况。
+  即没有进入for循环，可直接利用dummy.next=dummy.next。next;将头结点赋为空。
 ```
 
