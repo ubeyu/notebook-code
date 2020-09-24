@@ -73,6 +73,7 @@
 2.引入： ListNode dummy=new ListNode(0);
          dummy.next=head;
   可以处理length为1，n为1的情况。
-  即没有进入for循环，可直接利用dummy.next=dummy.next。next;将头结点赋为空。
+  即没有进入for循环，可直接利用 dummy.next=dummy.next.next 将头结点赋为空。
+3.需要有一个中间变量 tmp 用于保存当前 cur 的下一个节点信息，若不保存则在 cur.next = pre 这一步后丢失。
 ```
 
