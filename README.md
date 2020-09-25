@@ -83,3 +83,7 @@
    fast = fast.next.next;
 ```
 
+树：
+```
+1.树的层序遍历——广度优先搜索BFS： Queue<TreeNode> queue = new LinkedList<>();
+```
