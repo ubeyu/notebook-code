@@ -153,7 +153,10 @@ class Solution {
     }
 }
 
-3.Queue和Deque:
+3.树的中序遍历，递归和Stack两种方法。
+
+4.Queue和Deque:
 队列(queue)是一种常用的数据结构，可以将队列看做是一种特殊的线性表，该结构遵循的先进先出原则。Java中，LinkedList实现了Queue接口,因为LinkedList进行插入、删除操作效率较高；
 双向队列(Deque)是Queue的一个子接口，双向队列是指该队列两端的元素既能入队(offer)也能出队(poll),如果将Deque限制为只能从一端入队和出队，则可实现栈的数据结构。对于栈而言，有入栈(push)和出栈(pop)，遵循先进后出原则。
+
 ```
