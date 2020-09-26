@@ -85,5 +85,70 @@
 
 树：
 ```
-1.树的层序遍历——广度优先搜索BFS： Queue<TreeNode> queue = new LinkedList<>();
+1.树的层序遍历——广度优先搜索 BFS： 用队列 Queue
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root == null) return true;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            while(size > 0){
+                TreeNode node = queue.poll();
+                if(node.left != null){
+                    if(node.left.val >= node.val) return false;
+                    if(node.left.right != null && node.left.right.val >= node.val) return false;
+                    queue.offer(node.left);
+                }
+                if(node.right != null){
+                    if(node.right.val <= node.val) return false;
+                    if(node.right.left != null && node.right.left.val <= node.val) return false;
+                    queue.offer(node.right);
+                }
+                size--;
+            }
+        }
+        return true;
+    }
+}
+2.树的先序遍历——深度优先搜索 DFS： 用栈 Stack
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode(int x) { val = x; }
+ * }
+ */
+class Solution {
+    public boolean isValidBST(TreeNode root) {
+        if(root == null) return true;
+        Stack<TreeNode> stack = new Stack<>();
+        stack.add(root);
+        while(!stack.isEmpty()){
+            TreeNode node = stack.pop();
+            if(node.right != null){
+                if(node.right.val <= node.val) return false;
+                if(node.right.left != null && node.right.left.val <= node.val) return false;
+                stack.push(node.right);
+            }
+            if(node.left != null){
+                if(node.left.val >= node.val) return false;
+                if(node.left.right != null && node.left.right.val >= node.val) return false;
+                stack.push(node.left);
+            }
+        }
+        return true;
+    }
+}
 ```
