@@ -160,3 +160,32 @@ class Solution {
 双向队列(Deque)是Queue的一个子接口，双向队列是指该队列两端的元素既能入队(offer)也能出队(poll),如果将Deque限制为只能从一端入队和出队，则可实现栈的数据结构。对于栈而言，有入栈(push)和出栈(pop)，遵循先进后出原则。
 
 ```
+
+
+排序和搜索：
+```
+1.二分查找：
+建立 l、r、mid 三个参数用于二分查找。
+while(l < r) 为二分查找循环退出条件。
+mid 在 while 内赋值，mi d的初始化一般在 while 外面可以节省空间。
+如果当前 mid 位的值还未出现错误，则 l 为 mid+1 (因为不可能是mid位了);
+如果当前 mid 位的值出现错误，则 r 为 mid (因为可能是mid位);
+当结束循环时，返回 l，或 r 都可。
+
+public class Solution extends VersionControl {
+    public int firstBadVersion(int n) {
+        int l = 1, r = n, mid;
+        while(l < r){
+            mid = l + (r-l)/2;
+            if(!isBadVersion(mid)){
+                l = mid + 1;
+            }else{
+                r = mid;
+            }
+        }
+        return l;
+    }
+}
+
+2.
+```
