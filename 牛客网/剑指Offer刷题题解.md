@@ -125,6 +125,40 @@
             - [思路：](#思路-13)
         - [解法2： 双指针](#解法2-双指针)
             - [思路：](#思路-14)
+    - [题目42：和为S的两个数字](#题目42和为s的两个数字)
+            - [注意：](#注意-7)
+        - [解法1： 双指针加入乘积判断：11ms](#解法1-双指针加入乘积判断11ms)
+            - [思路：](#思路-15)
+        - [解法2： 双指针：不用判断，利用 “因为 a 和 b 和一定， a 和 b 相差越多，乘积越小”](#解法2-双指针不用判断利用-因为-a-和-b-和一定-a-和-b-相差越多乘积越小)
+            - [思路：](#思路-16)
+    - [题目43：左旋转字符串](#题目43左旋转字符串)
+            - [注意：](#注意-8)
+        - [解法1： 循环每一位调整位置。](#解法1-循环每一位调整位置)
+            - [思路：](#思路-17)
+    - [题目44：翻转单词顺序列](#题目44翻转单词顺序列)
+            - [注意：](#注意-9)
+        - [解法1： 双指针，由最右侧开始循环存放每个单词到 list。](#解法1-双指针由最右侧开始循环存放每个单词到-list)
+            - [思路：](#思路-18)
+    - [题目45：扑克牌顺子](#题目45扑克牌顺子)
+            - [注意：](#注意-10)
+        - [解法1： 双指针，由最右侧开始循环存放每个单词到 list。](#解法1-双指针由最右侧开始循环存放每个单词到-list-1)
+            - [思路：](#思路-19)
+    - [题目46：孩子们的游戏(圆圈中最后剩下的数)](#题目46孩子们的游戏圆圈中最后剩下的数)
+            - [注意：](#注意-11)
+        - [解法1： 双指针，由最右侧开始循环存放每个单词到 list。](#解法1-双指针由最右侧开始循环存放每个单词到-list-2)
+            - [思路：](#思路-20)
+    - [题目47：求1+2+3+...+n](#题目47求123n)
+        - [解法1：递归](#解法1递归)
+            - [思路：](#思路-21)
+    - [题目48：不用加减乘除做加法](#题目48不用加减乘除做加法)
+        - [解法1：!!! 位运算做加法 !!!](#解法1-位运算做加法-)
+            - [思路：](#思路-22)
+    - [题目49：把字符串转换成整数](#题目49把字符串转换成整数)
+        - [解法1：字符串/循环判断](#解法1字符串循环判断)
+            - [思路：](#思路-23)
+    - [题目50：数组中重复的数字](#题目50数组中重复的数字)
+        - [解法1：哈希表](#解法1哈希表-1)
+            - [思路：](#思路-24)
 
 <!-- /TOC -->
 
@@ -141,6 +175,9 @@
             - [题目19：顺时针打印矩阵](#题目19顺时针打印矩阵)
         - 『字符串』
             - [题目2：替换空格](#题目2替换空格)
+            - [题目34：第一个只出现一次的字符](#题目34第一个只出现一次的字符)
+            - [题目43：左旋转字符串](#题目43左旋转字符串)
+            - [题目44：翻转单词顺序列](#题目44翻转单词顺序列)
         - 『队列/堆栈』
             - [题目5：用两个栈实现队列](#题目5用两个栈实现队列)
             - [题目13：调整数组顺序使奇数位于偶数前面](#题目13调整数组顺序使奇数位于偶数前面)
@@ -159,6 +196,8 @@
             - [题目34：第一个只出现一次的字符](#题目34第一个只出现一次的字符)
             - [题目40：数组中只出现一次的数字](#题目40数组中只出现一次的数字)
     - 『算法』
+        - 『位运算』
+            - [题目48：不用加减乘除做加法](#题目48不用加减乘除做加法)
         - 『二分查找』
             - [题目1：二维数组中的查找](#题目1二维数组中的查找)
             - [题目6：旋转数组的最小数字](#题目6旋转数组的最小数字)
@@ -167,6 +206,9 @@
             - [题目33：丑数](#题目33丑数)
             - [题目34：第一个只出现一次的字符](#题目34第一个只出现一次的字符)
             - [题目41：和为S的连续正数序列](#题目41和为s的连续正数序列)
+            - [题目42：和为S的两个数字](#题目42和为s的两个数字)
+            - [题目44：翻转单词顺序列](#题目44翻转单词顺序列)
+            - [题目45：扑克牌顺子](#题目45扑克牌顺子)
         - 『双层循环』
             - [题目41：和为S的连续正数序列](#题目41和为s的连续正数序列)
         - 『排序算法』 
@@ -174,6 +216,7 @@
         - 『递归』
             - [题目3：从尾到头打印链表](#题目3从尾到头打印链表)
             - [题目4：重建二叉树](#题目4重建二叉树)
+            - [题目47：求1+2+3+...+n](#题目47求123n)
         - 『动态规划』
             - [题目7：斐波那契数列](#题目7斐波那契数列)
             - [题目9：变态跳台阶](#题目9变态跳台阶)
@@ -1666,6 +1709,355 @@ public class Solution {
     }
     private int sumCul(int l,int r){
         return (l+r)*(r+1-l)/2;
+    }
+}
+```
+<br><br>
+
+## 题目42：和为S的两个数字
+**输入一个递增排序的数组和一个数字S，在数组中查找两个数，使得他们的和正好是S，如果有多对数字的和等于S，输出两个数的乘积最小的。**
+
+#### 注意：
+1. 如果按照双指针从相隔最远进入循环，不需要再判断乘积是否最小。因为 a 和 b 和一定， a 和 b 相差越多，乘积越小；
+### 解法1： 双指针加入乘积判断：11ms
+#### 思路：
+1. 首先建立 ArrayList<Integer> list 用来存放结果；
+2. 判断边界条件，若 sum 小于 2，则不存在相应结果，直接返回 list；
+3. 建立变量 l、r 用于双指针。同时建立记录乘积最小的相关变量；
+4. 进入循环：
+    * 若相等且乘积小于当前记录的乘积，则令 flag 为 1，min 和 max 赋为当前索引，prod 赋为当前乘积，l--，r++；
+    * 若小于，l++；
+    * 若大于，r--；
+4. 循环结束，若 flag 为 1，则说明存在相等的且进行了记录，则在 list 中存入 min 和 max 值即可；
+5. 返回 list。
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(array.length < 2) return list;
+        int l=0,r=array.length-1;
+        int prod = Integer.MAX_VALUE;   //用来判断乘积最小
+        int min=array[l],max=array[r];  //用来记录乘积最小的索引坐标
+        int flag=0;                     //用来记录是否存在相等
+        while(l<r){
+            if(array[l] + array[r] == sum && array[l] * array[r] < prod){
+                flag = 1;
+                min = array[l];
+                max = array[r];
+                prod = array[l] * array[r];
+                l++;r--;
+            }else if(array[l] + array[r] < sum){
+                l++;
+            }else{
+                r--;
+            }
+        }
+        if(flag==1){
+            list.add(min);
+            list.add(max);
+        }
+        return list;
+    }
+}
+```
+### 解法2： 双指针：不用判断，利用 “因为 a 和 b 和一定， a 和 b 相差越多，乘积越小”
+#### 思路：
+1. 首先建立 ArrayList<Integer> list 用来存放结果；
+2. 判断边界条件，若 sum 小于 2，则不存在相应结果，直接返回 list；
+3. 建立变量 l、r 用于双指针；
+4. 进入循环：
+    * 若相等则存入list直接返回即可；
+    * 若小于，l++；
+    * 若大于，r--；
+4. 循环结束，若在循环内未返回结果，说明不存在相等，则返回 空list。
+```java
+import java.util.ArrayList;
+public class Solution {
+    public ArrayList<Integer> FindNumbersWithSum(int [] array,int sum) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(array.length < 2) return list;
+        int l=0,r=array.length-1;
+        while(l<r){
+            if(array[l] + array[r] == sum){
+                list.add(array[l]);
+                list.add(array[r]);
+                return list;
+            }else if(array[l] + array[r] < sum){
+                l++;
+            }else{
+                r--;
+            }
+        }
+        return list;
+    }
+}
+```
+<br><br>
+
+## 题目43：左旋转字符串
+**汇编语言中有一种移位指令叫做循环左移（ROL），现在有个简单的任务，就是用字符串模拟这个指令的运算结果。对于一个给定的字符序列S，请你把其循环左移K位后的序列输出。例如，字符序列S=”abcXYZdef”,要求输出循环左移3位后的结果，即“XYZdefabc”。是不是很简单？OK，搞定它！**
+
+#### 注意：
+1. 边界条件；
+2. StringBuilder() 和 .append() 方法。
+### 解法1： 循环每一位调整位置。
+#### 思路：
+1. 首先判断边界，然后建立 StringBuilder 用来存放结果；
+2. n > str.length() 时，取余；
+3. 循环判断对应位的存放方法，左移 n 位：
+* 新字符的前 str.length()-n 个 为旧字符的后 str.length()-n 个
+* 新字符的后 n 个 为旧字符的前 n 个
+4. 返回结果 .toString()。
+```java
+public class Solution {
+    public String LeftRotateString(String str,int n) {
+        if(str == null || str.length() == 0) return str; 
+        StringBuilder sb = new StringBuilder();
+        n = n % str.length();
+        for(int i=0;i<str.length();i++){
+            if(i < str.length()-n) sb.append(str.charAt(i+n));
+            else sb.append(str.charAt(i-str.length()+n));
+        }
+        return sb.toString();       
+    }
+}
+```
+<br><br>
+
+## 题目44：翻转单词顺序列
+**牛客最近来了一个新员工Fish，每天早晨总是会拿着一本英文杂志，写些句子在本子上。同事Cat对Fish写的内容颇感兴趣，有一天他向Fish借来翻看，但却读不懂它的意思。例如，“student. a am I”。后来才意识到，这家伙原来把句子单词的顺序翻转了，正确的句子应该是“I am a student.”。Cat对一一的翻转这些单词顺序可不在行，你能帮助他么？**
+
+#### 注意：
+1. substring(i,j) 都是小写：i 表示 i 从 0 开始，包括 i ；j 表示到 j 结束，不包括 j；
+2. ArrayList 判断是否是最后一个元素： **list.indexOf(li) == list.size()-1**。
+3. String 和 char[] 相互转换：
+    * char[] = string.toCharArray()
+    * string = new String(char[])
+
+### 解法1： 双指针，由最右侧开始循环存放每个单词到 list。
+#### 思路：
+1. 判断边界条件，若 str == null || str.length() == 0 ，直接返回 str ；
+2. 首先建立 List<String> list 用来存放 *每个单词* 和 *最后一个单词加 .* ；
+3. 建立变量 l、r 用于双指针，循环判断：
+    * 若当前 l 索引位置字符为' '，则说明 l 与 r 间存在一个单词，将 (l+1,r) 存放到 list（注意边界）。同时 r 赋值为 l， l--；
+    * 若当前 l 为 0 ，则说明到字符串的首部，则将 (l,r) 的存放，同时 l--，到达退出循环条件；
+    * 若为其他情况，则 l-- 即可。
+4. 循环 list：
+    * 若当前字符串在list中的坐标为list.size() - 1，即为最后一个，则不需要加 ' '；
+    * 否则循环在 sb 中加入 当前 s + ' '。 
+4. 循环结束，返回 sb.toString()。
+```java
+import java.util.*;
+public class Solution {
+    public String ReverseSentence(String str) {
+        if(str == null || str.length() == 0) return str;
+        List<String> list = new ArrayList<>();
+        int l=str.length()-1,r=str.length();
+        while(l>=0){
+            if(str.charAt(l) == ' '){
+                list.add(str.substring(l+1,r));
+                r=l;
+                l--;
+            }else if(l==0){
+                list.add(str.substring(l,r));
+                l--;
+            }else{
+                l--;
+            }
+        }
+        StringBuilder sb = new StringBuilder();
+        for(String s:list){
+            if(list.size() - 1 == list.indexOf(s)){
+                sb.append(s);
+            }else{
+                sb.append(s+' ');
+            }
+        }
+        return sb.toString();
+    }
+}
+```
+<br><br>
+
+## 题目45：扑克牌顺子
+**LL今天心情特别好,因为他去买了一副扑克牌,发现里面居然有2个大王,2个小王(一副牌原本是54张^_^)...他随机从中抽出了5张牌,想测测自己的手气,看看能不能抽到顺子,如果抽到的话,他决定去买体育彩票,嘿嘿！！“红心A,黑桃3,小王,大王,方片5”,“Oh My God!”不是顺子.....LL不高兴了,他想了想,决定大\小 王可以看成任何数字,并且A看作1,J为11,Q为12,K为13。上面的5张牌就可以变成“1,2,3,4,5”(大小王分别看作2和4),“So Lucky!”。LL决定去买体育彩票啦。 现在,要求你使用这幅牌模拟上面的过程,然后告诉我们LL的运气如何， 如果牌能组成顺子就输出true，否则就输出false。为了方便起见,你可以认为大小王是0。**
+
+#### 注意：
+1. 边界条件判断；
+2. Arrays.sort() 排序。
+
+### 解法1： 双指针，由最右侧开始循环存放每个单词到 list。
+#### 思路：
+1. 判断边界条件，若 str == null || str.length() == 0 ，直接返回 str ；
+2. 首先建立 List<String> list 用来存放 *每个单词* 和 *最后一个单词加 .* ；
+3. 建立变量 l、r 用于双指针，循环判断：
+    * 若当前 l 索引位置字符为' '，则说明 l 与 r 间存在一个单词，将 (l+1,r) 存放到 list（注意边界）。同时 r 赋值为 l， l--；
+    * 若当前 l 为 0 ，则说明到字符串的首部，则将 (l,r) 的存放，同时 l--，到达退出循环条件；
+    * 若为其他情况，则 l-- 即可。
+4. 循环 list：
+    * 若当前字符串在list中的坐标为list.size() - 1，即为最后一个，则不需要加 ' '；
+    * 否则循环在 sb 中加入 当前 s + ' '。 
+4. 循环结束，返回 sb.toString()。
+```java
+import java.util.*;
+public class Solution {
+    public boolean isContinuous(int [] numbers) {
+        if(numbers.length == 0) return false;
+        Arrays.sort(numbers);
+        int cha = 0, i = 0;
+        while(numbers[i] == 0){
+            cha++;
+            i++;
+        }
+        for(i=i+1;i<numbers.length;i++){
+            int sub = numbers[i]-numbers[i-1];
+            cha = cha - sub + 1;
+            if(sub == 0 || cha < 0) return false;
+        }
+        return true;
+    }
+}
+```
+<br><br>
+
+## 题目46：孩子们的游戏(圆圈中最后剩下的数)
+**每年六一儿童节,牛客都会准备一些小礼物去看望孤儿院的小朋友,今年亦是如此。HF作为牛客的资深元老,自然也准备了一些小游戏。其中,有个游戏是这样的:首先,让小朋友们围成一个大圈。然后,他随机指定一个数m,让编号为0的小朋友开始报数。每次喊到m-1的那个小朋友要出列唱首歌,然后可以在礼品箱中任意的挑选礼物,并且不再回到圈中,从他的下一个小朋友开始,继续0...m-1报数....这样下去....直到剩下最后一个小朋友,可以不用表演,并且拿到牛客名贵的“名侦探柯南”典藏版(名额有限哦!!^_^)。请你试着想下,哪个小朋友会得到这份礼品呢？(注：小朋友的编号是从0到n-1)。如果没有小朋友，请返回-1。**
+
+#### 注意：
+1. 边界条件判断；
+2. Arrays.sort() 排序。
+
+### 解法1： 双指针，由最右侧开始循环存放每个单词到 list。
+#### 思路：
+1. 。
+```java
+
+```
+<br><br>
+
+## 题目47：求1+2+3+...+n
+**求1+2+3+...+n，要求不能使用乘除法、for、while、if、else、switch、case等关键字及条件判断语句（A?B:C）。**
+
+### 解法1：递归
+#### 思路：
+1. 设置递归退出条件，当 n <= 1 时，直接返回 1；
+2. 其他条件下，n = n + Sum_Solution(n-1)。
+```java
+public class Solution {
+    public int Sum_Solution(int n) {
+        if(n <= 1) return 1;
+        n = n + Sum_Solution(n-1);
+        return n;
+    }
+}
+```
+<br><br>
+
+## 题目48：不用加减乘除做加法
+**写一个函数，求两个整数之和，要求在函数体内不得使用+、-、*、/四则运算符号。**
+
+### 解法1：!!! 位运算做加法 !!!
+#### 思路：
+1. 计算 a 与 b 相加的结果，使用位运算；
+2. 当数 a 不为 0 时：
+* 赋值 tmp 为 a 与 b 相或;
+* 赋值 a 为 a 与 b 相与，并且左移一位；
+* 赋值 b 为 tmp；
+3. 循环直到 a 为 0，此时输出 b 即可。
+```java
+public class Solution {
+    public int Add(int num1,int num2) {
+        while(num1 != 0){
+             int tmp = num1 ^ num2;
+             num1 = (num1 & num2) << 1;
+             num2 = tmp;
+         }
+        return num2;
+    }
+}
+```
+<br><br>
+
+## 题目49：把字符串转换成整数
+**将一个字符串转换成一个整数，要求不能使用字符串转换整数的库函数。 数值为0或者字符串不是一个合法的数值则返回0。**
+
+### 解法1：字符串/循环判断
+#### 思路：
+1. 建立 flag 和 ans 用于结果输出；
+2. 先判断首位，是+/-/数字/其他字符，分别对应处理；
+3. 循环处理字符串，利用 ans = 当前 + ans * 10 赋值；
+4. 返回结果，包含正负。
+```java
+public class Solution {
+    public int StrToInt(String str) {
+        if(str == null || str.length() == 0) return 0;
+        int flag = 1,ans = 0; // flag 表示正负，ans 表示结果。
+        int i = 0;            // i 表示索引。
+        //判断首位是+/-/数字/其他字符，分别对应处理。
+        if(str.charAt(i) == '+' || str.charAt(i) == '-'){
+            flag = str.charAt(i) == '+' ? 1:-1;
+        }else if(str.charAt(i) >= '0' && str.charAt(i) <= '9'){
+            flag = 1;
+            ans = str.charAt(i)-'0' + ans * 10;
+        }else{
+            return 0;
+        }
+        //从下一位开始循环，利用 ans = 当前 + ans * 10 赋值。
+        for(i=i+1;i<str.length();i++){
+            if(str.charAt(i) >= '0' && str.charAt(i) <= '9'){
+                ans = str.charAt(i)-'0' + ans * 10;
+            }else{
+                return 0;
+            }
+        }
+        //返回结果，包含正负。
+        return ans * flag;
+    }
+}
+```
+<br><br>
+
+## 题目50：数组中重复的数字
+**在一个长度为n的数组里的所有数字都在0到n-1的范围内。 数组中某些数字是重复的，但不知道有几个数字是重复的。也不知道每个数字重复几次。请找出数组中第一个重复的数字。 例如，如果输入长度为7的数组{2,3,1,0,2,5,3}，那么对应的输出是第一个重复的数字2。
+
+返回描述：
+如果数组中有重复的数字，函数返回true，否则返回false。
+如果数组中有重复的数字，把重复的数字放到参数duplication[0]中。（ps:duplication已经初始化，可以直接赋值使用。）。**
+
+### 解法1：哈希表
+#### 思路：
+1. 建立 flag 和 ans 用于结果输出；
+2. 当数 a 不为 0 时，：
+* 赋值 tmp 为 a 与 b 相或;
+* 赋值 a 为 a 与 b 相与，并且左移一位；
+* 赋值 b 为 tmp；
+3. 循环直到 a 为 0，此时输出 b 即可。
+```java
+public class Solution {
+    public int StrToInt(String str) {
+        if(str == null || str.length() == 0) return 0;
+        int flag = 1,ans = 0; // flag 表示正负，ans 表示结果。
+        int i = 0;            // i 表示索引。
+        //判断首位是+/-/数字/其他字符，分别对应处理。
+        if(str.charAt(i) == '+' || str.charAt(i) == '-'){
+            flag = str.charAt(i) == '+' ? 1:-1;
+        }else if(str.charAt(i) >= '0' && str.charAt(i) <= '9'){
+            flag = 1;
+            ans = str.charAt(i)-'0' + ans * 10;
+        }else{
+            return 0;
+        }
+        //从下一位开始循环，利用 ans = 当前 + ans * 10 赋值。
+        for(i=i+1;i<str.length();i++){
+            if(str.charAt(i) >= '0' && str.charAt(i) <= '9'){
+                ans = str.charAt(i)-'0' + ans * 10;
+            }else{
+                return 0;
+            }
+        }
+        //返回结果，包含正负。
+        return ans * flag;
     }
 }
 ```
