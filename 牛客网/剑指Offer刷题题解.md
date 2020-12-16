@@ -164,6 +164,9 @@
             - [思路：](#思路-25)
         - [解法2：左右循环](#解法2左右循环)
             - [思路：](#思路-26)
+    - [题目56：删除链表中重复的结点](#题目56删除链表中重复的结点)
+        - [解法1：链表处理，定义 head,pre,last 三个节点进行操作。](#解法1链表处理定义-headprelast-三个节点进行操作)
+            - [思路：](#思路-27)
 
 <!-- /TOC -->
 
@@ -193,6 +196,7 @@
             - [题目14：链表中倒数第k个结点](#题目14链表中倒数第k个结点)
             - [题目15：反转链表](#题目15反转链表)
             - [题目25：复杂链表的复制](#题目25复杂链表的复制)
+            - [题目56：删除链表中重复的结点](#题目56删除链表中重复的结点)
         - 『树』
             - [题目4：重建二叉树](#题目4重建二叉树)
             - [题目17：树的子结构](#题目17树的子结构)
@@ -2123,6 +2127,54 @@ public class Solution {
             tmp = tmp * A[i];
         }
         return B;
+    }
+}
+```
+<br><br>
+
+## 题目56：删除链表中重复的结点
+**在一个排序的链表中，存在重复的结点，请删除该链表中重复的结点，重复的结点不保留，返回链表头指针。 例如，链表1->2->3->3->4->4->5 处理后为 1->2->5。**
+
+### 解法1：链表处理，定义 head,pre,last 三个节点进行操作。
+#### 思路：
+1. 首先检查**头结点**及**头结点下一个节点**是否为空，若为空直接返回即可；
+2. 定义一个新节点 head，其下一个节点指向 pHead，定义 pre为 head，last 为 head.next；
+3. 进入 while 循环，当 last 不为空时：
+    * 判断 **last.next 节点是否为空** 及 **last 与 last.next 节点的值是否相等**，若都成立，说明没到末尾且存在相等值，则进入 while 循环，让last = last.next，直到**不等**或**为空**，while 循环结束，此时**last.next 为空** 或 **last 与 last.next 节点的值不等**，即 当前last的值还在重复中，则将 pre.next 指向 last.next，last变为 last.next；
+    * 其他情况下，pre 赋值 pre.next，last 赋值 last.next；
+4. 返回 head.next 即可。
+```java
+/*
+ public class ListNode {
+    int val;
+    ListNode next = null;
+
+    ListNode(int val) {
+        this.val = val;
+    }
+}
+*/
+import java.util.*;
+public class Solution {
+    public ListNode deleteDuplication(ListNode pHead){
+        if(pHead == null || pHead.next == null) return pHead;
+        ListNode head = new ListNode(0);
+        head.next = pHead;
+        ListNode pre = head;
+        ListNode last = head.next;
+        while(last != null){
+            if(last.next != null && last.val == last.next.val){
+                while(last.next != null && last.val == last.next.val){
+                    last = last.next;
+                }
+                pre.next = last.next;
+                last = last.next;
+            }else{
+                pre = pre.next;
+                last = last.next;
+            }
+        }
+        return head.next;
     }
 }
 ```
