@@ -233,6 +233,7 @@
             - [题目3：从尾到头打印链表](#题目3从尾到头打印链表)
             - [题目4：重建二叉树](#题目4重建二叉树)
             - [题目47：求1+2+3+...+n](#题目47求123n)
+            - [题目17：树的子结构](#题目17树的子结构)
         - 『动态规划』
             - [题目7：斐波那契数列](#题目7斐波那契数列)
             - [题目9：变态跳台阶](#题目9变态跳台阶)
@@ -823,7 +824,6 @@ public class Solution {
     }
 }
 ```
-
 <br><br>
 
 ## ★ 题目16：合并两个排序的链表
@@ -916,13 +916,55 @@ public class Solution {
 1. 示例
 
 输入
-> {1,3,5},{2,4,6}
+> {8,8,#,9,#,2,#,5},{8,9,#,2}
 
 返回值
-> {1,2,3,4,5,6}
+> true
 
 ### 思路 1：递归
+递归处理两个二叉树：
+* **HashSubtree() 方法**，用于找到与子树根节点值相同的节点，然后进入 judgeSub() 方法进一步判断：
+    1. 首先设置递归退出条件：判断 root1 和 root2 是否为空，为空说明**子树为空**或**父树的左或右支不存在相等节点**，则直接返回 false；
+    2. 如果当前父树的**根节点**或**左或右支节点**与子树根节点相等，则以**父树中的相等节点**和**子树根节点**为参数，进入判断方法，判断以此节点为根节点是否与子树相等。
+* **judgeSub() 方法**，用于判断以当前节点为根节点和子树根节点形成的树是否相等：
+    1. 递归退出条件：若 root2 为空，则不影响相等，返回 true；
+    2. 递归退出条件：若 root2 不为空，而此时 root1 为空，则说明不等，不是子树，返回 false；
+    3. 都不为空，判断两节点值是否相等：若相等，则递归判断各自的左右节点是否相等；
+    4. 若不相等，则此条路线不通，返回 false。
+```java
+/**
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
 
+    public TreeNode(int val) {
+        this.val = val;
+    }
+}
+*/
+public class Solution {
+    public boolean HasSubtree(TreeNode root1,TreeNode root2) {
+        if(root1 == null || root2 == null)  return false;
+        if(root1.val == root2.val){
+            return judgeSub(root1,root2);  
+        }
+        return HasSubtree(root1.left,root2) || HasSubtree(root1.right,root2);
+    }
+    private boolean judgeSub(TreeNode root1,TreeNode root2){
+        if(root2 == null){
+            return true;
+        }
+        if(root1 == null){
+            return false;
+        }
+        if(root1.val == root2.val){
+            return judgeSub(root1.left,root2.left) && judgeSub(root1.right,root2.right);
+        }
+        return false;
+    }
+}
+```
 
 
 <br><br>
