@@ -77,6 +77,9 @@
         - [思路 1：利用数据栈、最小值栈两个栈解决，时间复杂度为O（1）](#思路-1利用数据栈最小值栈两个栈解决时间复杂度为o1)
     - [题目21：栈的压入、弹出序列](#题目21栈的压入弹出序列)
         - [思路 1：利用辅助栈解决](#思路-1利用辅助栈解决)
+    - [题目22：从上往下打印二叉树 (二叉树的层序遍历)](#题目22从上往下打印二叉树-二叉树的层序遍历)
+            - [关于 Queue 注意：](#关于-queue-注意)
+        - [思路 1：非递归写法-利用队列 Queue](#思路-1非递归写法-利用队列-queue)
     - [题目25：复杂链表的复制](#题目25复杂链表的复制)
         - [思路 1：三步法：先复制，再处理随机节点，最后拆分](#思路-1三步法先复制再处理随机节点最后拆分)
     - [题目27：字符串的排列](#题目27字符串的排列)
@@ -196,6 +199,7 @@
             - [题目13：调整数组顺序使奇数位于偶数前面](#题目13调整数组顺序使奇数位于偶数前面)
             - [题目20：包含min函数的栈](#题目20包含min函数的栈)
             - [题目21：栈的压入、弹出序列](#题目21栈的压入弹出序列)
+            - [题目22：从上往下打印二叉树 (二叉树的层序遍历)](#题目22从上往下打印二叉树-二叉树的层序遍历)
         - 『链表』
             - [题目3：从尾到头打印链表](#题目3从尾到头打印链表)
             - [题目14：链表中倒数第k个结点](#题目14链表中倒数第k个结点)
@@ -234,6 +238,7 @@
             - [题目4：重建二叉树](#题目4重建二叉树)
             - [题目47：求1+2+3+...+n](#题目47求123n)
             - [题目17：树的子结构](#题目17树的子结构)
+            - [题目18：二叉树的镜像](#题目18二叉树的镜像)
         - 『动态规划』
             - [题目7：斐波那契数列](#题目7斐波那契数列)
             - [题目9：变态跳台阶](#题目9变态跳台阶)
@@ -243,6 +248,8 @@
             - [★ 题目11：二进制中1的个数](#★-题目11二进制中1的个数)
             - [★ 题目12：数值的整数次方](#★-题目12数值的整数次方)
             - [题目41：和为S的连续正数序列](#题目41和为s的连续正数序列)
+        - 『二叉树遍历』
+            - [题目22：从上往下打印二叉树 (二叉树的层序遍历)](#题目22从上往下打印二叉树-二叉树的层序遍历)
         - 『回溯法』   
             - [题目27：字符串的排列](#题目27字符串的排列)
             - [题目32： 把数组排成最小的数](#题目32-把数组排成最小的数)
@@ -996,7 +1003,33 @@ public class Solution {
 > {1,2,3,4,5,6}
 
 ### 思路 1：递归
-  
+1. 首先设置递归退出条件，若当前节点为空，则不处理直接返回；
+2. 然后从根节点开始，调换其左右节点，然后对其左右节点再分别调用 Mirror 方法，直到下属节点都为空。
+```java
+/**
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+}
+*/
+public class Solution {
+    public void Mirror(TreeNode root) {
+        if(root == null) return ;
+        TreeNode tmp = root.left;
+        root.left = root.right;
+        root.right = tmp;
+        Mirror(root.left);
+        Mirror(root.right);
+    }
+}
+```
+
 <br><br>
 
 ## 题目19：顺时针打印矩阵
@@ -1113,7 +1146,65 @@ public class Solution {
     }
 }
 ```
+<br><br>  
+  
+## 题目22：从上往下打印二叉树 (二叉树的层序遍历)
+**从上往下打印出二叉树的每个节点，同层节点从左至右打印。**
 
+#### 关于 Queue 注意：
+1. 队列 Queue 是一种特殊的线性表，LinkedList类实现了Queue接口。  
+2. 队列操作时：
+    * add： 增加一个元索。如果队列已满，则抛出一个IIIegaISlabEepeplian异常。
+    * remove： 移除并返回队列头部的元素。如果队列为空，则抛出一个NoSuchElementException异常。
+    * element： 返回队列头部的元素。如果队列为空，则抛出一个NoSuchElementException异常。
+    * offer： 添加一个元素并返回true。如果队列已满，则返回false。
+    * poll： 移除并返问队列头部的元素。如果队列为空，则返回null。
+    * peek： 返回队列头部的元素。如果队列为空，则返回null。
+    * put： 添加一个元素。如果队列满，则阻塞。
+    * take： 移除并返回队列头部的元素。如果队列为空，则阻塞。
+    
+### 思路 1：非递归写法-利用队列 Queue
+1. 定义 ArrayList 用于结果返回，root 为空时直接返回；
+2. 建立 Queue 用于层序遍历，依次存放每层的元素；
+3. 第一个 While 循环即代表当队列不为空时，一直遍历，同时每次进入这个循环时，用 size 记录该层的元素数量；
+4. 当 size 大于 0 时，每次取一个元素，将其值添加到结果 list 中，同时判断左右节点是否需要添加进队列 queue，记得size--；
+5. 循环结束，输出 list 即可。
+```java
+import java.util.*;
+/**
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+    
+    public TreeNode(int val) {
+        this.val = val;
+    }
+}
+二叉树的层序遍历
+*/
+public class Solution {
+    public ArrayList<Integer> PrintFromTopToBottom(TreeNode root) {
+        ArrayList<Integer> list = new ArrayList<>();
+        if(root == null) return list;
+        Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(root);
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            while(size > 0){
+                TreeNode node = queue.poll();
+                list.add(node.val);
+                if(node.left != null) queue.offer(node.left);
+                if(node.right != null) queue.offer(node.right);
+                size--;
+            }
+        }
+        return list;
+    }
+
+}
+```
+<br><br> 
 
 ## 题目25：复杂链表的复制
 **输入一个复杂链表（每个节点中有节点值，以及两个指针，一个指向下一个节点，另一个特殊指针random指向一个随机节点），请对此链表进行深拷贝，并返回拷贝后的头结点。（注意，输出结果中请不要返回参数中的节点引用，否则判题程序会直接返回空）。**
