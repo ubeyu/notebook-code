@@ -204,6 +204,9 @@
     - [题目56：删除链表中重复的结点](#题目56删除链表中重复的结点)
         - [解法1：链表处理，定义 head,pre,last 三个节点进行操作。](#解法1链表处理定义-headprelast-三个节点进行操作)
             - [思路：](#思路-36)
+    - [题目57：二叉树的下一个结点](#题目57二叉树的下一个结点)
+        - [解法1：递归中序遍历](#解法1递归中序遍历)
+            - [思路：](#思路-37)
 
 <!-- /TOC -->
 
@@ -2893,6 +2896,55 @@ public class Solution {
             }
         }
         return head.next;
+    }
+}
+```
+<br><br>
+
+## 题目57：二叉树的下一个结点
+**给定一个二叉树和其中的一个结点，请找出中序遍历顺序的下一个结点并且返回。注意，树中的结点不仅包含左右子结点，同时包含指向父结点的指针。**
+
+### 解法1：递归中序遍历
+#### 思路：
+1. 边界条件；
+2. 循环到根节点，中序遍历得到 list；
+3. 循环找到 list 中节点的位置，返回结果即可，注意：
+    * 若 i = list.size()-1 说明到达最后一个，则输出 null；
+    * 若不等，则输出 list.get(i+1) 即可；
+```java
+/*
+public class TreeLinkNode {
+    int val;
+    TreeLinkNode left = null;
+    TreeLinkNode right = null;
+    TreeLinkNode next = null;
+
+    TreeLinkNode(int val) {
+        this.val = val;
+    }
+}
+*/
+import java.util.*;
+public class Solution {
+    public TreeLinkNode GetNext(TreeLinkNode pNode){
+        if(pNode == null)    return null;
+        List<TreeLinkNode> list = new ArrayList<>();
+        TreeLinkNode pHead = pNode;
+        while(pHead.next != null){
+            pHead = pHead.next;
+        }
+        inorder(list, pHead);
+        int i=0;
+        for(;i<list.size();i++){
+            if(list.get(i) == pNode) break;
+        }
+        return i == list.size()-1 ? null : list.get(i+1);        
+    }
+    private void inorder(List<TreeLinkNode> list, TreeLinkNode pNode){
+        if(pNode == null)    return;
+        inorder(list, pNode.left);
+        list.add(pNode);
+        inorder(list, pNode.right);
     }
 }
 ```
