@@ -207,6 +207,11 @@
     - [题目57：二叉树的下一个结点](#题目57二叉树的下一个结点)
         - [解法1：递归中序遍历](#解法1递归中序遍历)
             - [思路：](#思路-37)
+    - [题目58：对称的二叉树](#题目58对称的二叉树)
+        - [解法1：层序遍历](#解法1层序遍历)
+            - [思路：](#思路-38)
+        - [解法2：递归](#解法2递归)
+            - [思路：](#思路-39)
 
 <!-- /TOC -->
 
@@ -2947,6 +2952,116 @@ public class Solution {
         inorder(list, pNode.left);
         list.add(pNode);
         inorder(list, pNode.right);
+    }
+}
+```
+<br><br>
+
+## 题目58：对称的二叉树
+**请实现一个函数，用来判断一棵二叉树是不是对称的。注意，如果一个二叉树同此二叉树的镜像是同样的，定义其为对称的。**
+
+### 解法1：层序遍历
+#### 思路：
+1. 边界条件；
+2. 把每一层进行对称判断；
+3. 存在问题，若是以下结构，无法判断：
+```
+        5
+    5       5
+  5   5   5   5
+5  # 5 # # # #  #
+```
+```java
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+import java.util.*;
+public class Solution {
+    boolean isSymmetrical(TreeNode pRoot){
+        if(pRoot == null)    return true;
+        Queue<TreeNode> queue = new LinkedList<>();
+        //直接将根节点的左右子节点添加
+        if(pRoot.left != null)    queue.offer(pRoot.left);
+        if(pRoot.right != null)    queue.offer(pRoot.right);
+        //若无，直接退出，返回true
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            //若某一层的节点数不为偶数，则一定不对称，返回false
+            if(size % 2 != 0)    return false;
+            //循环内分一半判断前半段和后半段是否相等
+            int length = size/2;
+            int[] tmp = new int[length];
+            while(size > 0){
+                TreeNode node = queue.poll();
+                if(size > length){
+                    tmp[length*2 - size] = node.val;
+                }else{
+                    if(node.val != tmp[size-1]) return false;
+                }
+                if(node.left != null)    queue.offer(node.left);
+                if(node.right != null)    queue.offer(node.right);
+                size --;
+            }
+        }
+        return true;
+    }
+}
+```
+
+### 解法2：递归
+**递归方法一定是传入两个参数，因为涉及到两个分支的比较。**
+#### 思路：
+1. 边界条件；
+2. 返回递归方法，方法传入根节点的左、右子节点；
+3. 递归方法：
+    1. 退出条件设置：
+    * 如果两个参数都为空，则直接返回 true；
+    * 如果两个参数有一个为空，则不对称，返回 false。
+    2. 退出条件之外，判断三项：
+    * 两节点值相等；
+    * 递归判断 1 节点的左子节点和 2 节点的右子节点是否符合规则；
+    * 递归判断 1 节点的右子节点和 2 节点的左子节点是否符合规则；
+4. 输出结果即可。
+```
+        5
+    5       5
+  5   5   5   5
+5  # 5 # # # #  #
+```
+```java
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+import java.util.*;
+public class Solution {
+    boolean isSymmetrical(TreeNode pRoot){
+        if(pRoot == null)    return true;
+        return leftAndRightIsSym(pRoot.left, pRoot.right);
+    }
+    private boolean leftAndRightIsSym(TreeNode le, TreeNode ri){
+        if(le == null && ri == null)    return true;
+        if(le == null || ri == null)    return false;
+        return le.val == ri.val && leftAndRightIsSym(le.right,ri.left) && leftAndRightIsSym(le.left,ri.right);
     }
 }
 ```
