@@ -212,6 +212,9 @@
             - [思路：](#思路-38)
         - [解法2：递归](#解法2递归)
             - [思路：](#思路-39)
+    - [题目59：按之字形顺序打印二叉树](#题目59按之字形顺序打印二叉树)
+        - [解法1：层序遍历 + 双堆栈](#解法1层序遍历--双堆栈)
+            - [思路：](#思路-40)
 
 <!-- /TOC -->
 
@@ -241,6 +244,7 @@
             - [题目21：栈的压入、弹出序列](#题目21栈的压入弹出序列)
             - [题目22：从上往下打印二叉树 (二叉树的层序遍历)](#题目22从上往下打印二叉树-二叉树的层序遍历)
             - [题目38：二叉树的深度](#题目38二叉树的深度)
+            - [题目59：按之字形顺序打印二叉树](#题目59按之字形顺序打印二叉树)
         - 『链表』
             - [题目3：从尾到头打印链表](#题目3从尾到头打印链表)
             - [题目14：链表中倒数第k个结点](#题目14链表中倒数第k个结点)
@@ -294,6 +298,7 @@
             - [题目38：二叉树的深度](#题目38二叉树的深度)
             - [题目47：求1+2+3+...+n](#题目47求123n)
             - [题目57：二叉树的下一个结点](#题目57二叉树的下一个结点)
+            - [题目58：对称的二叉树](#题目58对称的二叉树)
         - 『动态规划』
             - [题目7：斐波那契数列](#题目7斐波那契数列)
             - [题目9：变态跳台阶](#题目9变态跳台阶)
@@ -309,6 +314,8 @@
             - [题目23：二叉搜索树的后序遍历序列](#题目23二叉搜索树的后序遍历序列)
             - [题目26：二叉搜索树与双向链表](#题目26二叉搜索树与双向链表)
             - [题目38：二叉树的深度](#题目38二叉树的深度)
+            - [题目58：对称的二叉树](#题目58对称的二叉树)
+            - [题目59：按之字形顺序打印二叉树](#题目59按之字形顺序打印二叉树)
         - 『回溯法』   
             - [题目27：字符串的排列](#题目27字符串的排列)
             - [题目32： 把数组排成最小的数](#题目32-把数组排成最小的数)
@@ -3065,5 +3072,62 @@ public class Solution {
     }
 }
 ```
+<br><br>
 
+## 题目59：按之字形顺序打印二叉树
+**请实现一个函数按照之字形打印二叉树，即第一行按照从左到右的顺序打印，第二层按照从右至左的顺序打印，第三行按照从左到右的顺序打印，其他行以此类推。**
 
+### 解法1：层序遍历 + 双堆栈
+#### 思路：
+1. 边界条件；
+2. 建立两个堆栈，分别用于奇数层和偶数层的遍历；
+3. 将每一层的结果存入 list，然后再存放到 lists；
+4. 返回 lists 即可。
+
+```java
+import java.util.ArrayList;
+
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+}
+*/
+import java.util.*;
+public class Solution {
+    public ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
+        if(pRoot == null)    return lists;
+        Stack<TreeNode> stack1 = new Stack<>();
+        Stack<TreeNode> stack2 = new Stack<>();
+        stack1.push(pRoot);
+        while(!stack1.isEmpty() || !stack2.isEmpty()){
+            ArrayList<Integer> list = new ArrayList<>();
+            if(!stack1.isEmpty()){
+                while(!stack1.isEmpty()){
+                    TreeNode node = stack1.pop();
+                    if(node.left != null)    stack2.push(node.left);
+                    if(node.right != null)    stack2.push(node.right);
+                    list.add(node.val);
+                }
+            }else{
+                while(!stack2.isEmpty()){
+                    TreeNode node = stack2.pop();
+                    if(node.right != null)    stack1.push(node.right);
+                    if(node.left != null)    stack1.push(node.left); 
+                    list.add(node.val);
+                }
+            }
+            lists.add(list);
+        }
+        return lists;
+    }
+
+}
+```
