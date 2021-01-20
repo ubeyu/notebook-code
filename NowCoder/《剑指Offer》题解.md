@@ -215,6 +215,13 @@
     - [题目59：按之字形顺序打印二叉树](#题目59按之字形顺序打印二叉树)
         - [解法1：层序遍历 + 双堆栈](#解法1层序遍历--双堆栈)
             - [思路：](#思路-40)
+    - [题目60：把二叉树打印成多行](#题目60把二叉树打印成多行)
+        - [解法1：层序遍历](#解法1层序遍历-1)
+            - [思路：](#思路-41)
+    - [题目61：序列化二叉树](#题目61序列化二叉树)
+        - [注意](#注意-1)
+        - [解法1：前序遍历](#解法1前序遍历)
+            - [思路：](#思路-42)
 
 <!-- /TOC -->
 
@@ -299,6 +306,8 @@
             - [题目47：求1+2+3+...+n](#题目47求123n)
             - [题目57：二叉树的下一个结点](#题目57二叉树的下一个结点)
             - [题目58：对称的二叉树](#题目58对称的二叉树)
+            - [题目60：把二叉树打印成多行](#题目60把二叉树打印成多行)
+            - [题目61：序列化二叉树](#题目61序列化二叉树)
         - 『动态规划』
             - [题目7：斐波那契数列](#题目7斐波那契数列)
             - [题目9：变态跳台阶](#题目9变态跳台阶)
@@ -316,6 +325,8 @@
             - [题目38：二叉树的深度](#题目38二叉树的深度)
             - [题目58：对称的二叉树](#题目58对称的二叉树)
             - [题目59：按之字形顺序打印二叉树](#题目59按之字形顺序打印二叉树)
+            - [题目60：把二叉树打印成多行](#题目60把二叉树打印成多行)
+            - [题目61：序列化二叉树](#题目61序列化二叉树)
         - 『回溯法』   
             - [题目27：字符串的排列](#题目27字符串的排列)
             - [题目32： 把数组排成最小的数](#题目32-把数组排成最小的数)
@@ -3129,5 +3140,130 @@ public class Solution {
         return lists;
     }
 
+}
+```
+
+
+## 题目60：把二叉树打印成多行
+**从上到下按层打印二叉树，同一层结点从左至右输出。每一层输出一行。**
+
+### 解法1：层序遍历
+#### 思路：
+1. 边界条件；
+2. 层序遍历；
+4. 返回 lists 即可。
+
+```java
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+import java.util.*;
+public class Solution {
+    ArrayList<ArrayList<Integer> > Print(TreeNode pRoot) {
+        ArrayList<ArrayList<Integer>> lists = new ArrayList<>();
+        if(pRoot == null)    return lists;
+            Queue<TreeNode> queue = new LinkedList<>();
+        queue.offer(pRoot);
+        while(!queue.isEmpty()){
+            int size = queue.size();
+            ArrayList<Integer> list = new ArrayList<>();
+            while(size>0){
+                TreeNode node = queue.poll();
+                if(node.left != null)    queue.offer(node.left);
+                if(node.right != null)    queue.offer(node.right);
+                list.add(node.val);
+                size--;
+            }
+            lists.add(list);
+        }
+        return lists;
+    }
+}
+```
+
+## 题目61：序列化二叉树
+**请实现两个函数，分别用来序列化和反序列化二叉树：**</br>
+**二叉树的序列化是指：把一棵二叉树按照某种遍历方式的结果以某种格式保存为字符串，从而使得内存中建立起来的二叉树可以持久保存。序列化可以基于先序、中序、后序、层序的二叉树遍历方式来进行修改，序列化的结果是一个字符串，序列化时通过 某种符号表示空节点（#），以 ！ 表示一个结点值的结束（value!）。二叉树的反序列化是指：根据某种遍历顺序得到的序列化字符串结果str，重构二叉树。例如，我们可以把一个只有根节点为1的二叉树序列化为"1,"，然后通过自己的函数来解析回这个二叉树。**
+
+
+### 注意
+1. str.split("!") 根据 某段字符串""，将 str 分为几段 String[]。
+2. 由于 strs[] 为 String[] 类型，则赋值采用：
+```
+node.val = Integer.parseInt(strs[index]);
+```
+3. StringBuilder sb = new StringBuilder()l; 中 sb.append() 内加字符串而非字符：
+```
+sb.append("#!").toString();
+```
+
+### 解法1：前序遍历
+#### 思路：
+1. 边界条件；
+2. inorder 用于递归前序遍历；
+3. revinorder 用于递归根据字符串赋值二叉树；
+
+```java
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+import java.util.*;
+public class Solution {
+    
+    //序列化
+    String Serialize(TreeNode root) {
+        StringBuilder sb = new StringBuilder();
+        if(root == null)    return sb.append("#!").toString();
+        inorder(root, sb);
+        return sb.toString();
+    }
+    private void inorder(TreeNode node, StringBuilder sb){
+        if(node == null){
+            sb.append("#!");
+            return;
+        }
+        sb.append(node.val  + "!");
+        inorder(node.left, sb);
+        inorder(node.right, sb);
+    }
+    
+    //反序列化
+    TreeNode Deserialize(String str) {
+        if(str == null || str.length() == 0)    return null;
+        return revinorder(str.split("!"));
+    }
+    private int index = -1;
+    
+    private TreeNode revinorder(String[] strs){
+        index ++;
+        if(strs[index].equals("#")){ //用equals，不用==
+            return null;
+        }
+        TreeNode node = new TreeNode(0);
+        node.val = Integer.parseInt(strs[index]);
+        node.left = revinorder(strs);
+        node.right = revinorder(strs);
+        return node;
+    }
 }
 ```
