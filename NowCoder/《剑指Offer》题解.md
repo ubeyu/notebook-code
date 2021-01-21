@@ -222,6 +222,11 @@
         - [注意](#注意-1)
         - [解法1：前序遍历](#解法1前序遍历)
             - [思路：](#思路-42)
+    - [题目62：二叉搜索树的第k个结点](#题目62二叉搜索树的第k个结点)
+        - [解法1：中序遍历（全部遍历）](#解法1中序遍历全部遍历)
+            - [思路：](#思路-43)
+        - [解法2：中序遍历（部分遍历）](#解法2中序遍历部分遍历)
+            - [思路：](#思路-44)
 
 <!-- /TOC -->
 
@@ -269,6 +274,7 @@
             - [题目26：二叉搜索树与双向链表](#题目26二叉搜索树与双向链表)
             - [题目38：二叉树的深度](#题目38二叉树的深度)
             - [题目57：二叉树的下一个结点](#题目57二叉树的下一个结点)
+            - [题目62：二叉搜索树的第k个结点](#题目62二叉搜索树的第k个结点)
         - 『哈希表』
             - [题目34：第一个只出现一次的字符](#题目34第一个只出现一次的字符)
             - [题目40：数组中只出现一次的数字](#题目40数组中只出现一次的数字)
@@ -308,6 +314,7 @@
             - [题目58：对称的二叉树](#题目58对称的二叉树)
             - [题目60：把二叉树打印成多行](#题目60把二叉树打印成多行)
             - [题目61：序列化二叉树](#题目61序列化二叉树)
+            - [题目62：二叉搜索树的第k个结点](#题目62二叉搜索树的第k个结点)
         - 『动态规划』
             - [题目7：斐波那契数列](#题目7斐波那契数列)
             - [题目9：变态跳台阶](#题目9变态跳台阶)
@@ -327,6 +334,7 @@
             - [题目59：按之字形顺序打印二叉树](#题目59按之字形顺序打印二叉树)
             - [题目60：把二叉树打印成多行](#题目60把二叉树打印成多行)
             - [题目61：序列化二叉树](#题目61序列化二叉树)
+            - [题目62：二叉搜索树的第k个结点](#题目62二叉搜索树的第k个结点)
         - 『回溯法』   
             - [题目27：字符串的排列](#题目27字符串的排列)
             - [题目32： 把数组排成最小的数](#题目32-把数组排成最小的数)
@@ -3210,8 +3218,8 @@ sb.append("#!").toString();
 ### 解法1：前序遍历
 #### 思路：
 1. 边界条件；
-2. inorder 用于递归前序遍历；
-3. revinorder 用于递归根据字符串赋值二叉树；
+2. preorder 用于递归前序遍历；
+3. revpreorder 用于递归根据字符串赋值二叉树；
 
 ```java
 /*
@@ -3234,36 +3242,118 @@ public class Solution {
     String Serialize(TreeNode root) {
         StringBuilder sb = new StringBuilder();
         if(root == null)    return sb.append("#!").toString();
-        inorder(root, sb);
+        preorder(root, sb);
         return sb.toString();
     }
-    private void inorder(TreeNode node, StringBuilder sb){
+    private void preorder(TreeNode node, StringBuilder sb){
         if(node == null){
             sb.append("#!");
             return;
         }
         sb.append(node.val  + "!");
-        inorder(node.left, sb);
-        inorder(node.right, sb);
+        preorder(node.left, sb);
+        preorder(node.right, sb);
     }
     
     //反序列化
     TreeNode Deserialize(String str) {
         if(str == null || str.length() == 0)    return null;
-        return revinorder(str.split("!"));
+        return revpreorder(str.split("!"));
     }
     private int index = -1;
     
-    private TreeNode revinorder(String[] strs){
+    private TreeNode revpreorder(String[] strs){
         index ++;
         if(strs[index].equals("#")){ //用equals，不用==
             return null;
         }
         TreeNode node = new TreeNode(0);
         node.val = Integer.parseInt(strs[index]);
-        node.left = revinorder(strs);
-        node.right = revinorder(strs);
+        node.left = revpreorder(strs);
+        node.right = revpreorder(strs);
         return node;
+    }
+}
+```
+
+
+## 题目62：二叉搜索树的第k个结点
+**给定一棵二叉搜索树，请找出其中的第k小的结点。**
+
+### 解法1：中序遍历（全部遍历）
+#### 思路：
+1. 边界条件；
+2. inorder 用于递归中序遍历；
+3. 判断 k 是否大于 size，若大于则返回 null，否则返回结果；
+
+```java
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+}
+*/
+import java.util.*;
+public class Solution {
+    TreeNode KthNode(TreeNode pRoot, int k){
+        if(pRoot == null || k == 0)    return null;
+        List<TreeNode> list = new ArrayList<>();
+        inorder(pRoot, list);
+        return k > list.size() ? null:list.get(k-1);
+    }
+    private void inorder(TreeNode node, List<TreeNode> list){
+        if(node == null)    return;
+        inorder(node.left, list);
+        list.add(node);
+        inorder(node.right, list);
+    }
+}
+```
+
+### 解法2：中序遍历（部分遍历）
+#### 思路：
+1. 边界条件；
+2. inorder 用于递归中序遍历；
+3. 判断 k 是否大于全局变量 index，若大于则返回 null，否则返回 index 结果；
+
+```java
+/*
+public class TreeNode {
+    int val = 0;
+    TreeNode left = null;
+    TreeNode right = null;
+
+    public TreeNode(int val) {
+        this.val = val;
+
+    }
+
+}
+*/
+import java.util.*;
+public class Solution {
+    TreeNode KthNode(TreeNode pRoot, int k){
+        if(pRoot == null || k == 0)    return null;
+        inorder(pRoot,k);
+        return index < k ? null : ans;
+    }
+    private int index = 0;
+    private TreeNode ans = new TreeNode(0);
+    private void inorder(TreeNode node,int k){
+        if(node == null)    return;
+        inorder(node.left,k);
+        index++;
+        if(index == k){
+            ans = node;
+            return;
+        }
+        inorder(node.right,k);
     }
 }
 ```
