@@ -30,9 +30,15 @@
         - [笔记： Array.sort() 与 Collections.sort()](#笔记-arraysort-与-collectionssort)
         - [思路1：Array.sort()](#思路1arraysort)
         - [解法](#解法-8)
+    - [989. 数组形式的整数加法](#989-数组形式的整数加法)
+        - [笔记： ArratList() 与 LinkedList()](#笔记-arratlist-与-linkedlist)
+        - [思路1：ArrayList()](#思路1arraylist)
+        - [解法](#解法-9)
+        - [思路2：LinkedList()](#思路2linkedlist)
+        - [解法](#解法-10)
     - [1018. 可被 5 整除的二进制前缀](#1018-可被-5-整除的二进制前缀)
         - [思路1：数学（注意 int 溢出）](#思路1数学注意-int-溢出)
-        - [解法](#解法-9)
+        - [解法](#解法-11)
 
 <!-- /TOC -->
 
@@ -44,6 +50,7 @@
             - [189. 旋转数组](#189-旋转数组)
             - [455. 分发饼干](#455-分发饼干)
             - [628. 三个数的最大乘积](#628-三个数的最大乘积)
+            - [989. 数组形式的整数加法](#989-数组形式的整数加法)
         - 『矩阵/二维数组』
         - 『字符串』
             - [387.字符串中的第一个唯一字符](#387字符串中的第一个唯一字符)
@@ -51,6 +58,7 @@
         - 『队列/堆栈』
             - [103.二叉树的锯齿形层序遍历](#103二叉树的锯齿形层序遍历)
         - 『链表』
+            - [989. 数组形式的整数加法（ArrayList 和 LinkedList）](#989-数组形式的整数加法)
         - 『树』
             - [103.二叉树的锯齿形层序遍历](#103二叉树的锯齿形层序遍历)
         - 『哈希表』
@@ -60,6 +68,7 @@
         - 『二分查找』
         - 『双/多指针』
             - [455. 分发饼干](#455-分发饼干)
+            - [989. 数组形式的整数加法](#989-数组形式的整数加法)
         - 『双层循环』
             - [135.分发糖果](#135分发糖果)
         - 『排序算法』 
@@ -517,6 +526,126 @@ class Solution {
     }
 }
 ```
+<br><br>
+
+
+## 989. 数组形式的整数加法
+**对于非负整数 X 而言，X 的数组形式是每位数字按从左到右的顺序形成的数组。例如，如果 X = 1231，那么其数组形式为 [1,2,3,1]。给定非负整数 X 的数组形式 A，返回整数 X+K 的数组形式。**<br>
+
+示例：
+```
+输入：A = [1,2,0,0], K = 34
+输出：[1,2,3,4]
+解释：1200 + 34 = 1234
+```
+```
+输入：A = [2,1,5], K = 806
+输出：[1,0,2,1]
+解释：215 + 806 = 1021
+```
+注意：
+1. 给定的整型数组长度范围是[3,104]，数组中所有的元素范围是[-1000, 1000]。
+2. 输入的数组中任意三个数的乘积不会超出32位有符号整数的范围。
+
+### 笔记： ArratList() 与 LinkedList()
+ArrayList是基于**数组**实现的，LinkedList是基于**双链表**实现的：
+1. LinkedList类不仅是List接口的实现类，可以根据索引来随机访问集合中的元素，除此之外，LinkedList还实现了Deque接口，Deque接口是Queue接口的子接口，它代表一个双向队列，因此LinkedList可以作为双向队列 ，栈（可以参见Deque提供的接口方法）和List集合使用，功能强大。
+2. 因为Array是基于索引(index)的数据结构，它使用索引在数组中搜索和读取数据是很快的，可以直接返回数组中index位置的元素，因此在随机访问集合元素上有较好的性能。Array获取数据的时间复杂度是O(1),但是要插入、删除数据却是开销很大的，因为这需要移动数组中插入位置之后的的所有元素。
+3. 相对于ArrayList，LinkedList的随机访问集合元素时性能较差，因为需要在双向列表中找到要index的位置，再返回；但在插入，删除操作是更快的。因为LinkedList不像ArrayList一样，不需要改变数组的大小，也不需要在数组装满的时候要将所有的数据重新装入一个新的数组，这是ArrayList最坏的一种情况，时间复杂度是O(n)，而LinkedList中插入或删除的时间复杂度仅为O(1)。ArrayList在插入数据时还需要更新索引（除了插入数组的尾部）。
+4. 对于本题 LinkedList() 方法而言，用到：
+    * void addFirst(Object o) 在列表首部添加元素
+    * void addLast(Object o) 在列表末尾添加元素
+    * Object getFirst() 返回列表第一个元素
+    * Object geLast() 返回列表最后一个元素
+    * Object removeFirst() 删除列表中第一个元素
+    * Object removeLast() 删除列表中最后一个元素
+
+### 思路1：ArrayList()
+1. 边界条件；
+2. 第一个 for 循环对 A[] 数组处理，将 A 数组各个位赋值为与 K 对应位相加后的结果：
+    * flag 表示是否有进位；
+    * k_cop 表示 K 去掉后面 A.length 位后剩下的数； 
+    * A[i] 表示处理后的结果后 A.length 位。
+3. 第一个 while 循环用于获得此时 k_cop 剩下的位数：
+    * ksub 表示剩下位数 + 1；
+4. ksub 先除以 10，获得剩下位数，然后进第二个 while 循环，用于将 k_cop 按从最大位到最小位的顺序添加到 list 中；
+5. 最后按照同样顺序添加 A[i] 到 list 中。
+6. 返回结果即可。
+
+### 解法
+```java
+class Solution {
+    public List<Integer> addToArrayForm(int[] A, int K) {
+        List<Integer> list = new ArrayList<>();
+        if(A.length == 0)   return list;
+        int flag = 0, k_cop = K;
+        for(int i=A.length-1;i>=0;i--){
+            int bit = A[i] + k_cop % 10 + flag;
+            A[i] = bit % 10;
+            flag = bit / 10;
+            k_cop = k_cop / 10;
+        }
+        k_cop = k_cop + flag;
+        int ksub = 1;
+        while(k_cop / ksub != 0){
+            ksub = ksub * 10;
+        }
+        ksub = ksub / 10;
+        while(ksub != 0){
+            list.add(k_cop / ksub);
+            k_cop = k_cop % ksub;
+            ksub = ksub / 10;
+        }
+        for(int a:A){
+            list.add(a);
+        }
+        return list;
+    }
+}
+```
+
+### 思路2：LinkedList()
+1. 边界条件；
+2. 建立变量：
+    * i 表示当前 A[] 的索引位；
+    * flag 表示是否有进位；
+    * k_cop 去掉后面 i 位后剩下的数；
+3. 进 while 循环，条件为 i >= 0 或 k_cop > 0 或 flag > 0：
+    * 建立 bit 记录当前 i 位置 K + flag 的值；
+    * 若 A[] 在 i 位置还有数，则 bit 加这个数；
+    * list 添加 bit % 10 到首位;
+    * flag 为 bit / 10；
+    * k_cop 为 k_cop / 10；
+    * i --；
+    * ksub 表示剩下位数 + 1；
+4. 循环退出时，返回结果即可。
+
+### 解法
+```java
+import java.util.*;
+class Solution {
+    public List<Integer> addToArrayForm(int[] A, int K) {
+        // List<Integer> list = new LinkedList<>();
+        // 注意报错:cannot find symbol。
+        // 原因：addFirst 是子类的方法，必须显示声明
+        LinkedList<Integer> list = new LinkedList<>();
+        if(A.length == 0)   return list;
+        int i = A.length-1, flag = 0, k_cop = K;
+        while(i >= 0 || k_cop > 0 || flag > 0){
+            int bit = k_cop % 10 + flag;
+            if(i >= 0){
+                bit = bit + A[i];
+            }
+            list.addFirst(bit % 10);
+            flag = bit / 10;
+            k_cop = k_cop / 10;
+            i--;
+        }
+        return list;
+    }
+}
+```
+
 <br><br>
 
 ## 1018. 可被 5 整除的二进制前缀
