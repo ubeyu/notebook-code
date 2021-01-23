@@ -39,6 +39,9 @@
     - [1018. 可被 5 整除的二进制前缀](#1018-可被-5-整除的二进制前缀)
         - [思路1：数学（注意 int 溢出）](#思路1数学注意-int-溢出)
         - [解法](#解法-11)
+    - [1319. 连通网络的操作次数](#1319-连通网络的操作次数)
+        - [思路1：并查集](#思路1并查集)
+        - [解法](#解法-12)
 
 <!-- /TOC -->
 
@@ -84,7 +87,8 @@
         - 『回溯法』  
         - 『贪心算法』    
            - [455. 分发饼干](#455-分发饼干)
-            
+        - 『并查集』    
+            - [1319. 连通网络的操作次数](#1319-连通网络的操作次数) 
 
 <!-- /TOC -->
 
@@ -686,7 +690,85 @@ class Solution {
     }
 }
 ```
+<br><br>
 
+## 1319. 连通网络的操作次数
+**用以太网线缆将 n 台计算机连接成一个网络，计算机的编号从 0 到 n-1。线缆用 connections 表示，其中 connections[i] = [a, b] 连接了计算机 a 和 b。网络中的任何一台计算机都可以通过网络直接或者间接访问同一个网络中其他任意一台计算机。给你这个计算机网络的初始布线 connections，你可以拔开任意两台直连计算机之间的线缆，并用它连接一对未直连的计算机。请你计算并返回使所有计算机都连通所需的最少操作次数。如果不可能，则返回 -1。**<br>
+
+示例1：
+```
+输入：n = 4, connections = [[0,1],[0,2],[1,2]]
+输出：1
+解释：拔下计算机 1 和 2 之间的线缆，并将它插到计算机 1 和 3 上。
+```
+
+
+### 思路1：并查集
+1. 建立全局变量，记录父节点的数组：
+```
+private int[] parent;
+```
+2. 边界条件；
+3. 赋值 parent[i] = i；
+4. **union()** 方法根据 connections[][] 更新 parent 的值，找到每个节点的父节点：
+    * 找到 root1 的根父节点
+    * 找到 root2 的根父节点
+    * 若相等，则属于同一联通分量，直接返回；若不相等，则将 root1 的父节点赋值为 root2
+5. **find()** 方法用于找到当前节点的父节点：
+    * parent[node] == node 返回 node；
+    * parent[node] != node 赋值并返回 parent[node] = find(parent[node])；
+6. 再次遍历 parent 对每个节点判断，记录联通分量的个数；
+7. 输出结果为 **联通分量的个数 - 1** 即可。
+### 解法
+```java
+class Solution {
+    //建立记录父节点的数组
+    private int[] parent;
+
+    public int makeConnected(int n, int[][] connections) {
+        if(connections.length < n-1)    return -1;
+        //将每个节点的父节点赋值为自己
+        parent = new int[n];
+        for(int i=0;i<n;i++){
+            parent[i] = i;
+        }
+        //遍历 connections，更新联通分量的信息
+        for(int[] connection:connections){
+            union(connection[0], connection[1]);
+        }
+        //count 用于记录联通分量的个数
+        int count = 0;
+        //对每个节点判断，记录联通分量的个数
+        for(int i=0;i<n;i++){
+            //4,[[0,1],[0,2],[1,2]] 
+            //共4个节点：p[0]指向1，p[1]指向2，p[2]指向2，p[3]指向3
+            //说明p[0],p[1],p[2]属于1个联通分量，p[3]属于1个联通分量
+            //count = 2，所以电缆需要 2-1 = 1 根。
+            if(parent[i] == i){
+                count++;
+            }
+        }
+        //返回联通分量的个数 - 1，即为需要移动的电缆数目
+        return count-1;
+    }
+    private void union(int n1, int n2){
+        //找到 root1 的根父节点
+        int root1 = find(n1);
+        //找到 root2 的根父节点
+        int root2 = find(n2);
+        //若相等，则属于同一联通分量，直接返回
+        if(root1 == root2){
+            return;
+        }
+        //若不相等，则将 root1 的父节点赋值为 root2
+        parent[root1] = root2;
+    }
+    private int find(int node){
+        //若当前节点的父节点指向自己，则返回自己；若不指向自己，则找到它的根父节点
+        return parent[node] == node ? node : (parent[node] = find(parent[node]));
+    }
+}
+```
 
 
 
