@@ -30,18 +30,21 @@
         - [笔记： Array.sort() 与 Collections.sort()](#笔记-arraysort-与-collectionssort)
         - [思路1：Array.sort()](#思路1arraysort)
         - [解法](#解法-8)
+    - [674. 最长连续递增序列](#674-最长连续递增序列)
+        - [思路1：贪心算法](#思路1贪心算法)
+        - [解法](#解法-9)
     - [989. 数组形式的整数加法](#989-数组形式的整数加法)
         - [笔记： ArratList() 与 LinkedList()](#笔记-arratlist-与-linkedlist)
         - [思路1：ArrayList()](#思路1arraylist)
-        - [解法](#解法-9)
-        - [思路2：LinkedList()](#思路2linkedlist)
         - [解法](#解法-10)
+        - [思路2：LinkedList()](#思路2linkedlist)
+        - [解法](#解法-11)
     - [1018. 可被 5 整除的二进制前缀](#1018-可被-5-整除的二进制前缀)
         - [思路1：数学（注意 int 溢出）](#思路1数学注意-int-溢出)
-        - [解法](#解法-11)
+        - [解法](#解法-12)
     - [1319. 连通网络的操作次数](#1319-连通网络的操作次数)
         - [思路1：并查集](#思路1并查集)
-        - [解法](#解法-12)
+        - [解法](#解法-13)
 
 <!-- /TOC -->
 
@@ -527,6 +530,44 @@ class Solution {
         if(nums.length < 3) return 0;
         Arrays.sort(nums);
         return Math.max(nums[0]*nums[1]*nums[nums.length-1], nums[nums.length-3]*nums[nums.length-2]*nums[nums.length-1]);
+    }
+}
+```
+<br><br>
+
+## 674. 最长连续递增序列
+**给定一个未经排序的整数数组，找到最长且 连续递增的子序列，并返回该序列的长度。连续递增的子序列可以由两个下标 l 和 r（l < r）确定，如果对于每个 l <= i < r，都有 nums[i] < nums[i + 1] ，那么子序列 [nums[l], nums[l + 1], ..., nums[r - 1], nums[r]] 就是连续递增子序列。**
+
+例如：
+```
+输入：nums = [1,3,5,4,7]
+输出：3
+解释：最长连续递增序列是 [1,3,5], 长度为3。
+尽管 [1,3,5,7] 也是升序的子序列, 但它不是连续的，因为 5 和 7 在原数组里被 4 隔开。 
+```
+
+### 思路1：贪心算法
+1. 边界处理。
+2. 进循环：
+* nums[i] < nums[i+1]时： len++，ans 取最大的len；
+* nums[i] < nums[i+1]时： len = 1；
+3. 返回ans。
+
+### 解法
+```java
+class Solution {
+    public int findLengthOfLCIS(int[] nums) {
+        if(nums.length == 0)    return 0;
+        int len = 1, ans = 1;
+        for(int i=0;i<nums.length-1;i++){
+            if(nums[i] < nums[i+1]){
+                len ++;
+                ans = Math.max(ans,len);
+            }else{
+                len = 1;
+            }
+        }
+        return ans;
     }
 }
 ```
