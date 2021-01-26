@@ -234,6 +234,9 @@
     - [题目64：滑动窗口的最大值](#题目64滑动窗口的最大值)
         - [解法1：双循环](#解法1双循环)
             - [思路：](#思路-46)
+    - [题目65：矩阵中的路径](#题目65矩阵中的路径)
+        - [解法1：回溯法](#解法1回溯法)
+            - [思路：](#思路-47)
 
 <!-- /TOC -->
 
@@ -309,6 +312,7 @@
             - [题目41：和为S的连续正数序列](#题目41和为s的连续正数序列)
             - [题目51：构建乘积数组](#题目51构建乘积数组)
             - [题目64：滑动窗口的最大值](#题目64滑动窗口的最大值)
+            - [题目65：矩阵中的路径](#题目65矩阵中的路径)
         - 『排序算法』 
             - [题目32：把数组排成最小的数](#题目32把数组排成最小的数)
         - 『归并排序』 
@@ -349,6 +353,7 @@
         - 『回溯法』   
             - [题目27：字符串的排列](#题目27字符串的排列)
             - [题目32： 把数组排成最小的数](#题目32-把数组排成最小的数)
+            - [题目65：矩阵中的路径](#题目65矩阵中的路径)
             
 
 <!-- /TOC -->
@@ -1608,6 +1613,7 @@ public class Solution {
         }else{
             for(int j=i;j<ch.length;j++){
                 swap(ch,i,j);
+                //注意是 i + 1;
                 PermutationProcess(ch,lists,i+1);
                 swap(ch,j,i);
             }
@@ -3484,6 +3490,66 @@ public class Solution {
             list.add(eveNum);
         }
         return list;
+    }
+}
+```
+<br><br>
+
+## 题目65：矩阵中的路径
+**请设计一个函数，用来判断在一个矩阵中是否存在一条包含某字符串所有字符的路径。路径可以从矩阵中的任意一个格子开始，每一步可以在矩阵中向左，向右，向上，向下移动一个格子。如果一条路径经过了矩阵中的某一个格子，则该路径不能再进入该格子。如矩阵中包含一条字符串"bcced"的路径，但是矩阵中不包含"abcb"路径，因为字符串的第一个字符b占据了矩阵中的第一行第二个格子之后，路径不能再次进入该格子。**
+```
+输入
+"ABCESFCSADEE",3,4,"ABCCED"
+返回值
+true
+```
+### 解法1：回溯法
+#### 思路：
+1. 边界条件，以下情况时，直接输出 false：
+    * matrix 长度为零；
+    * matrix 长度小于 str 长度；
+2. 建立 flag[matrix.length] 标志位，初始化为false；
+3. 回溯法：循环遍历二维数组，找到起点等于 str 第一个元素的值，再递归判断四周是否符合条件；
+4. backTrack() 方法：
+* backTrack(初始矩阵，索引行坐标 i，索引纵坐标 j，矩阵行数，矩阵列数，待判断的字符串，字符串索引初始为 0 即先判断字符串的第一位)；
+* 先根据 i 和 j 计算匹配的第一个元素转为一维数组的位置；
+* 设置递归终止条件；
+* 若 k 已经到达 str 末尾了，说明之前的都已经匹配成功了，直接返回 true 即可；
+* 若未达到末尾，则设置当前位置 flag 为已经选择过，然后递归对当前位置 上下左右 进行判断，若成立返回 true；
+* 若不成立，设置当前位置 flag 为未选择，然后返回 false。
+5. 当主循环结束，未返回 true，说明不存在路径，返回 false 即可。
+。
+```java
+import java.util.*;
+public class Solution {
+    public boolean hasPath(char[] matrix, int rows, int cols, char[] str){
+        if(matrix.length == 0 || matrix.length < str.length)    return false;
+        boolean[] flag = new boolean[matrix.length];
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                if(backTrack(matrix,i,j,rows,cols,flag,str,0)){
+                    return true;
+                }                
+            }
+        }
+        return false;
+    }
+    private boolean backTrack(char[] matrix, int i, int j, int rows, int cols, boolean[] flag, char[] str, int k){
+        //注意 flag 索引 index 的计算方法
+        int index = i*cols + j;
+        if(i<0 || j<0 || i>=rows || j>=cols || flag[index] == true || k>=str.length || matrix[index] != str[k]){
+            return false;
+        }
+        if(k == str.length-1){
+            return true;
+        }
+        flag[index] = true;
+        if(backTrack(matrix,i-1,j,rows,cols,flag,str,k+1) || backTrack(matrix,i+1,j,rows,cols,flag,str,k+1) 
+          || backTrack(matrix,i,j-1,rows,cols,flag,str,k+1) || backTrack(matrix,i,j+1,rows,cols,flag,str,k+1)){
+            return true;
+        }
+        flag[index] = false;
+        return false;
     }
 }
 ```
