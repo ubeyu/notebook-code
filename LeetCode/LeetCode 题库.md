@@ -42,9 +42,15 @@
     - [1018. 可被 5 整除的二进制前缀](#1018-可被-5-整除的二进制前缀)
         - [思路1：数学（注意 int 溢出）](#思路1数学注意-int-溢出)
         - [解法](#解法-12)
+    - [1128. 等价多米诺骨牌对的数量](#1128-等价多米诺骨牌对的数量)
+        - [注意：](#注意)
+        - [思路1：哈希表](#思路1哈希表)
+        - [解法](#解法-13)
+        - [思路2：数组](#思路2数组)
+        - [解法](#解法-14)
     - [1319. 连通网络的操作次数](#1319-连通网络的操作次数)
         - [思路1：并查集](#思路1并查集)
-        - [解法](#解法-13)
+        - [解法](#解法-15)
 
 <!-- /TOC -->
 
@@ -57,6 +63,7 @@
             - [455. 分发饼干](#455-分发饼干)
             - [628. 三个数的最大乘积](#628-三个数的最大乘积)
             - [989. 数组形式的整数加法](#989-数组形式的整数加法)
+            - [1128. 等价多米诺骨牌对的数量](#1128-等价多米诺骨牌对的数量)
         - 『矩阵/二维数组』
         - 『字符串』
             - [387.字符串中的第一个唯一字符](#387字符串中的第一个唯一字符)
@@ -68,6 +75,7 @@
         - 『树』
             - [103.二叉树的锯齿形层序遍历](#103二叉树的锯齿形层序遍历)
         - 『哈希表』
+            - [1128. 等价多米诺骨牌对的数量](#1128-等价多米诺骨牌对的数量)
            
     - 『算法』
         - 『位运算』
@@ -731,6 +739,82 @@ class Solution {
     }
 }
 ```
+<br><br>
+
+
+## 1128. 等价多米诺骨牌对的数量
+**给你一个由一些多米诺骨牌组成的列表 dominoes。如果其中某一张多米诺骨牌可以通过旋转 0 度或 180 度得到另一张多米诺骨牌，我们就认为这两张牌是等价的。形式上，dominoes[i] = [a, b] 和 dominoes[j] = [c, d] 等价的前提是 a==c 且 b==d，或是 a==d 且 b==c。在 0 <= i < j < dominoes.length 的前提下，找出满足 dominoes[i] 和 dominoes[j] 等价的骨牌对 (i, j) 的数量。**
+
+示例1：
+```
+输入：dominoes = [[1,2],[2,1],[3,4],[5,6]]
+输出：1
+```
+
+### 注意：
+1. for(Integer i:map.values()) 可以用来循环 HashMap 的 value。
+### 思路1：哈希表
+1. 边界条件；
+2. 建立哈希表，键 Integer 值 Integer ，循环：
+    * key： [a,b]，a>b 则为 a×10+b，否则为 b×10+a（记录了翻转后相等的情况，一共 0-99/2 种）；
+    * 若 map 包含 key，则 value 加一，否则 value 赋值为 1；
+3. 结束后 map.values() 包含每种情况的元素数目，循环 map.values() 对每个数进行 **组合数C(N)(2)** 计算，结果相加；
+4. 输出结果即可。
+### 解法
+```java
+class Solution {
+    public int numEquivDominoPairs(int[][] dominoes) {
+        if(dominoes.length == 0 || dominoes.length == 1)    return 0;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<dominoes.length;i++){
+            int key = dominoes[i][0] > dominoes[i][1] ? dominoes[i][0] * 10 + dominoes[i][1] : dominoes[i][1] * 10 + dominoes[i][0]; 
+            if(map.containsKey(key)){
+                map.put(key,map.get(key)+1);
+            }else{
+                map.put(key,1);
+            }
+        }
+        int ans = 0;
+        for(Integer i:map.values()){
+            ans = ans + cul(i);
+        }
+        return ans;
+    }
+    private int cul(int n){
+        return n*(n-1)/2;
+    }
+}
+```
+
+### 思路2：数组
+1. 边界条件；
+2. 建立数组 new int[100]，记录 0-99 种情况 ，循环：
+    * 索引： [a,b]，a>b 则为 a×10+b，否则为 b×10+a（记录了翻转后相等的情况，一共 0-99/2 种）；
+    * 每个对应索引的数组元素累加 1；
+3. 结束后数组包含每种情况的数目，循环对每个元素进行 **组合数C(N)(2)** 计算，结果相加；
+4. 输出结果即可。
+### 解法
+```java
+class Solution {
+    public int numEquivDominoPairs(int[][] dominoes) {
+        if(dominoes.length == 0 || dominoes.length == 1)    return 0;
+        int[] rec = new int[100];
+        for(int i=0;i<dominoes.length;i++){
+            int key = dominoes[i][0] > dominoes[i][1] ? dominoes[i][0] * 10 + dominoes[i][1] : dominoes[i][1] * 10 + dominoes[i][0]; 
+            rec[key]++;
+        }
+        int ans = 0;
+        for(Integer i:rec){
+            ans = ans + cul(i);
+        }
+        return ans;
+    }
+    private int cul(int n){
+        return n*(n-1)/2;
+    }
+}
+```
+
 <br><br>
 
 ## 1319. 连通网络的操作次数
