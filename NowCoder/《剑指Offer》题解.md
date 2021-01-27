@@ -237,6 +237,9 @@
     - [题目65：矩阵中的路径](#题目65矩阵中的路径)
         - [解法1：回溯法](#解法1回溯法)
             - [思路：](#思路-47)
+    - [题目66：机器人的运动范围](#题目66机器人的运动范围)
+        - [解法1：回溯法](#解法1回溯法-1)
+            - [思路：](#思路-48)
 
 <!-- /TOC -->
 
@@ -354,6 +357,7 @@
             - [题目27：字符串的排列](#题目27字符串的排列)
             - [题目32： 把数组排成最小的数](#题目32-把数组排成最小的数)
             - [题目65：矩阵中的路径](#题目65矩阵中的路径)
+            - [题目66：机器人的运动范围](#题目66机器人的运动范围)
             
 
 <!-- /TOC -->
@@ -3553,7 +3557,53 @@ public class Solution {
     }
 }
 ```
+<br><br>
 
+## 题目66：机器人的运动范围
+**地上有一个m行和n列的方格。一个机器人从坐标0,0的格子开始移动，每一次只能向左，右，上，下四个方向移动一格，但是不能进入行坐标和列坐标的数位之和大于k的格子。 例如，当k为18时，机器人能够进入方格（35,37），因为3+5+3+7 = 18。但是，它不能进入方格（35,38），因为3+5+3+8 = 19。请问该机器人能够达到多少个格子。**
+```
+输入
+5,10,10
+返回值
+21
+```
+### 解法1：回溯法
+#### 思路：
+1. 不进行边界条件判断；
+2. 建立 flag[][] 标志位，初始化为false；
+3. 回溯法 backTrack() 方法：
+    * backTrack(数位之和，行坐标 i，纵坐标 j，矩阵行数，矩阵列数，标志位矩阵)；
+    * 设置递归终止条件；
+    * 若未退出递归，则标记此位置走过了，赋值 true 即可；
+    * 返回 上下左右 + 1。
+5. cul() 用于计算一个数按位相加后的结果，用于递归退出条件判断。
+```java
+public class Solution {
+    public int movingCount(int threshold, int rows, int cols){
+        boolean[][] flag = new boolean[rows][cols];
+        return backTrack(threshold, 0 ,0 ,rows, cols, flag);
+    }
+    private int backTrack(int threshold, int i, int j, int rows, int cols, boolean[][] flag){
+        if(i<0 || j<0 || i>=rows || j>=cols || flag[i][j] == true || cul(i)+cul(j) > threshold){
+            return 0;
+        }
+        flag[i][j] = true;
+        return backTrack(threshold, i-1, j, rows, cols, flag) + 
+            backTrack(threshold, i+1, j, rows, cols, flag) +
+            backTrack(threshold, i, j-1, rows, cols, flag) +
+            backTrack(threshold, i, j+1, rows, cols, flag) + 1 ;   
+    }
+    private int cul(int num){
+        int sum = 0;
+        int numc = num;
+        while(numc != 0){
+            sum = sum + numc % 10;
+            numc = numc / 10;
+        }
+        return sum;
+    }
+}
+```
 
 
 
