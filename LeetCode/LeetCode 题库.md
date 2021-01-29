@@ -54,6 +54,12 @@
     - [1319. 连通网络的操作次数](#1319-连通网络的操作次数)
         - [思路1：并查集](#思路1并查集)
         - [解法](#解法-16)
+    - [1631. 最小体力消耗路径](#1631-最小体力消耗路径)
+        - [注意](#注意)
+        - [思路1：二分查找 + BFS思路？ 未写出来](#思路1二分查找--bfs思路-未写出来)
+        - [解法](#解法-17)
+        - [思路2：二分查找 + BFS](#思路2二分查找--bfs)
+        - [解法](#解法-18)
 
 <!-- /TOC -->
 
@@ -951,5 +957,135 @@ class Solution {
 ```
 
 
+<br><br>
+
+## 1631. 最小体力消耗路径
+**你准备参加一场远足活动。给你一个二维 rows x columns 的地图 heights ，其中 heights[row][col] 表示格子 (row, col) 的高度。一开始你在最左上角的格子 (0, 0) ，且你希望去最右下角的格子 (rows-1, columns-1) （注意下标从 0 开始编号）。你每次可以往 上，下，左，右 四个方向之一移动，你想要找到耗费 体力 最小的一条路径。一条路径耗费的 体力值 是路径上相邻格子之间 高度差绝对值 的 最大值 决定的。请你返回从左上角走到右下角的最小 体力消耗值 。**<br>
+
+示例1：
+```
+输入：heights = [[1,2,2],[3,8,2],[5,3,5]]
+输出：2
+解释：路径 [1,3,5,3,5] 连续格子的差值绝对值最大为 2 。
+这条路径比路径 [1,2,2,2,5] 更优，因为另一条路径差值最大值为 3 。
+```
 
 
+### 注意
+1. queue.offer(new int[]{0,0});
+
+### 思路1：二分查找 + BFS思路？ 未写出来
+1. 建立全局变量，记录父节点的数组：
+```
+private int[] parent;
+```
+2. 边界条件；
+3. 赋值 parent[i] = i；
+4. **union()** 方法根据 connections[][] 更新 parent 的值，找到每个节点的父节点：
+    * 找到 root1 的根父节点
+    * 找到 root2 的根父节点
+    * 若相等，则属于同一联通分量，直接返回；若不相等，则将 root1 的父节点赋值为 root2
+5. **find()** 方法用于找到当前节点的父节点：
+    * parent[node] == node 返回 node；
+    * parent[node] != node 赋值并返回 parent[node] = find(parent[node])；
+6. 再次遍历 parent 对每个节点判断，记录联通分量的个数；
+7. 输出结果为 **联通分量的个数 - 1** 即可。
+### 解法
+```java
+class Solution {
+    public int minimumEffortPath(int[][] heights) {
+        int rows = heights.length, cols = rows == 0 ? 0 : heights[0].length;
+        if(rows == 0 || cols == 0 )  return 0;
+        int min = Integer.MAX_VALUE, max = 0;
+        for(int i=0;i<rows;i++){
+            for(int j=0;j<cols;j++){
+                min = Math.min(min,heights[i][j]);
+                max = Math.max(max,heights[i][j]);
+            }
+        }
+        int l = 0 ,r = max - min;
+        while(l < r){
+            int mid = l + (r - l)/2;
+            if(backTrackFlag(heights,heights[0][0],0,0,rows,cols,mid)){
+                r = mid - 1;
+            }else{
+                l = mid + 1;
+            }
+        }
+        return l; 
+    }
+    private boolean backTrackFlag(int[][] heights, int pre, int i, int j, int rows, int cols, int k){
+        boolean[][] flag = new boolean[rows][cols];
+        return backTrack(heights,heights[0][0],i,j,rows,cols,k,flag);
+    }
+    private boolean backTrack(int[][] heights, int pre, int i, int j, int rows, int cols, int k, boolean[][] flag){
+        if(i<0 || j<0 || i>=rows || j>=cols || flag[i][j] == true ||  Math.abs(heights[i][j] - pre) > k){
+            if(i>0 && j>0 && i<rows && j<cols && flag[i][j] == true){
+                flag[i][j] = false;
+            }
+            return false;
+        }
+        flag[i][j] = true;
+        if(i == rows - 1 && j == cols - 1) return true;
+        return backTrack(heights, heights[i][j], i-1, j, rows, cols, k, flag) || 
+            backTrack(heights, heights[i][j], i+1, j, rows, cols, k, flag) || 
+            backTrack(heights, heights[i][j], i, j-1, rows, cols, k, flag) || 
+            backTrack(heights, heights[i][j], i, j+1, rows, cols, k, flag);
+
+    }
+}
+```
+
+### 思路2：二分查找 + BFS
+1. 建立全局变量，记录方向数组：
+```
+private int[][] dir = {{-1,0},{1,0},{0,-1},{0,1}};
+```
+2. 边界条件；
+3. 二分查找；
+4. **union()** 方法根据 connections[][] 更新 parent 的值，找到每个节点的父节点：
+    * 找到 root1 的根父节点
+    * 找到 root2 的根父节点
+    * 若相等，则属于同一联通分量，直接返回；若不相等，则将 root1 的父节点赋值为 root2
+5. **find()** 方法用于找到当前节点的父节点：
+    * parent[node] == node 返回 node；
+    * parent[node] != node 赋值并返回 parent[node] = find(parent[node])；
+6. 再次遍历 parent 对每个节点判断，记录联通分量的个数；
+7. 输出结果为 **联通分量的个数 - 1** 即可。
+### 解法
+```java
+class Solution {
+    private int[][] dir = {{-1,0},{1,0},{0,-1},{0,1}};
+
+    public int minimumEffortPath(int[][] heights) {
+        int rows = heights.length, cols = rows == 0 ? 0 : heights[0].length;
+        if(rows == 0 || cols == 0 )  return 0;
+        int l = 0 ,r = 999999;
+        while(l <= r){
+            int mid = l + (r - l)/2;
+            Queue<int[]> queue = new LinkedList<>();
+            queue.offer(new int[]{0,0});
+            boolean[][] flag = new boolean[rows][cols];
+            flag[0][0] = true;
+            while(!queue.isEmpty()){
+                int[] index = queue.poll();
+                int x = index[0], y = index[1];
+                for(int i=0;i<4;i++){
+                    int nx = x + dir[i][0];
+                    int ny = y + dir[i][1];
+                    if(nx>=0 && ny>=0 && nx<rows && ny<cols && !flag[nx][ny] && Math.abs(heights[x][y] - heights[nx][ny]) <= mid){
+                        flag[nx][ny] = true;
+                        queue.offer(new int[]{nx,ny});
+                    }
+                }
+            }    
+            if(flag[rows-1][cols-1]){
+                r = mid - 1;
+            }else{
+                l = mid + 1;
+            }
+        }
+        return l; 
+    }
+}
+```
